@@ -14,7 +14,7 @@ module.exports = {
 
         if (existing) {
             await interaction.reply({
-                content: `You are already registered, ${displayName}. Your Discord ID is saved in the database.`
+                content: `You are already registered, ${displayName}.`
             });
             return;
         }
@@ -26,7 +26,7 @@ module.exports = {
         });
 
         await interaction.reply({
-            content: `✅ Registered successfully for ${displayName} (${discordId}). Your starter inventory is ready.`
+            content: `✅ Registered successfully for ${displayName}. Your starter inventory is ready.`
         });
     }
 };

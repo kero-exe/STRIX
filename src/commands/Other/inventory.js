@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { getUser, getInventory, addItem, removeItem, getItemLabel, getItemValue, sellItem } = require('../../database/db');
+const { getUser, getInventory, addItem, removeItem, getItemLabel, getItemValue, sellItem, transferUnits, transferItem } = require('../../database/db');
 const { topics, aliases } = require('../../data/topics.json');
 
 function resolveItemKey(input) {
@@ -42,6 +42,14 @@ module.exports = {
                 .setDescription('View your current inventory'))
         .addSubcommand(subcommand =>
             subcommand
+                .setName('balance')
+                .setDescription('Check a player balance')
+                .addUserOption(option =>
+                    option.setName('player')
+                        .setDescription('The player whose balance to check')
+                        .setRequired(false)))
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('sell')
                 .setDescription('Sell an item for units')
                 .addStringOption(option =>
@@ -51,6 +59,23 @@ module.exports = {
                 .addIntegerOption(option =>
                     option.setName('quantity')
                         .setDescription('How many to sell')
+                        .setMinValue(1)
+                        .setRequired(false)))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('give')
+                .setDescription('Give another player units or an item')
+                .addUserOption(option =>
+                    option.setName('player')
+                        .setDescription('The player to give to')
+                        .setRequired(true))
+                .addStringOption(option =>
+                    option.setName('item')
+                        .setDescription('Item key to give if gifting an item')
+                        .setRequired(false))
+                .addIntegerOption(option =>
+                    option.setName('amount')
+                        .setDescription('Units to give or quantity of the item')
                         .setMinValue(1)
                         .setRequired(false)))
         .addSubcommand(subcommand =>
@@ -110,6 +135,70 @@ module.exports = {
                 });
                 return;
             }
+        }
+
+        if (subcommand === 'balance') {
+            const balanceUser = getUser(targetDiscordId);
+
+            if (!balanceUser) {
+                await interaction.reply({
+                    content: `${targetMember.username} is not registered yet.`,
+                });
+                return;
+            }
+
+            await interaction.reply({
+                content: `${targetMember.username} has ${balanceUser.units} units.`
+            });
+            return;
+        }
+
+        if (subcommand === 'give') {
+            const targetUser = getUser(targetDiscordId);
+            const itemKey = resolveItemKey(interaction.options.getString('item'));
+            const amount = interaction.options.getInteger('amount') || 1;
+
+            if (!targetUser) {
+                await interaction.reply({
+                    content: `${targetMember.username} is not registered yet.`,
+                });
+                return;
+            }
+
+            if (itemKey) {
+                const result = transferItem(discordId, targetDiscordId, itemKey, amount);
+                if (!result) {
+                    await interaction.reply({
+                        content: `You do not have enough ${getItemLabel(itemKey)} to give.`,
+                    });
+                    return;
+                }
+
+                await interaction.reply({
+                    content: `Gave ${amount}x ${getItemLabel(itemKey)} to ${targetMember.username}.`,
+                });
+                return;
+            }
+
+            if (!amount || amount < 1) {
+                await interaction.reply({
+                    content: 'Specify either an item or a unit amount to give.',
+                });
+                return;
+            }
+
+            const transfer = transferUnits(discordId, targetDiscordId, amount);
+            if (!transfer || !transfer.ok) {
+                await interaction.reply({
+                    content: 'You do not have enough units to give.',
+                });
+                return;
+            }
+
+            await interaction.reply({
+                content: `Gave ${amount} units to ${targetMember.username}.`,
+            });
+            return;
         }
 
         if (subcommand === 'add') {

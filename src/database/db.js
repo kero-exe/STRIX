@@ -144,12 +144,85 @@ function getItemValue(itemKey) {
         return 0;
     }
 
-    const match = rawEntry.match(/Cost:\s*`?\s*([0-9]+(?:\.[0-9]+)?)\s*units?/i);
+    const match = rawEntry.match(/(?:\*\*)?Cost(?:\*\*)?\s*:\s*(?:\*\*)?\s*`?\s*([0-9]+(?:\.[0-9]+)?)\s*units?/i);
     if (!match) {
         return 0;
     }
 
     return Number(match[1]) || 0;
+}
+
+function resolveItemKey(input) {
+    const { aliases } = require('../data/topics.json');
+    const normalized = String(input || '').trim().toLowerCase();
+    if (!normalized) return null;
+
+    if (aliases[normalized]) {
+        return aliases[normalized];
+    }
+
+    if (normalized in topics) {
+        return normalized;
+    }
+
+    return null;
+}
+
+function transferUnits(fromDiscordId, toDiscordId, amount) {
+    if (!fromDiscordId || !toDiscordId) {
+        throw new Error('fromDiscordId and toDiscordId are required.');
+    }
+
+    const safeAmount = Number(amount) || 0;
+    if (safeAmount <= 0) {
+        return null;
+    }
+
+    const sender = getUser(fromDiscordId);
+    const recipient = getUser(toDiscordId);
+
+    if (!sender || !recipient) {
+        return null;
+    }
+
+    if (sender.units < safeAmount) {
+        return { ok: false, sender, recipient, amount: safeAmount };
+    }
+
+    db.prepare('UPDATE users SET units = units - ? WHERE discord_id = ?').run(safeAmount, fromDiscordId);
+    db.prepare('UPDATE users SET units = units + ? WHERE discord_id = ?').run(safeAmount, toDiscordId);
+
+    return {
+        ok: true,
+        sender: getUser(fromDiscordId),
+        recipient: getUser(toDiscordId),
+        amount: safeAmount
+    };
+}
+
+function transferItem(fromDiscordId, toDiscordId, itemKey, quantity = 1) {
+    if (!fromDiscordId || !toDiscordId || !itemKey) {
+        throw new Error('fromDiscordId, toDiscordId, and itemKey are required.');
+    }
+
+    const safeQty = Number(quantity) || 1;
+    const senderInventory = getInventory(fromDiscordId);
+    const existing = senderInventory.find(item => item.item_key === itemKey);
+
+    if (!existing || existing.quantity < safeQty) {
+        return null;
+    }
+
+    removeItem(fromDiscordId, itemKey, safeQty);
+    addItem(toDiscordId, itemKey, safeQty);
+
+    return {
+        ok: true,
+        itemKey,
+        quantity: safeQty,
+        sender: getUser(fromDiscordId),
+        recipient: getUser(toDiscordId)
+    };
 }
 
 function sellItem(discordId, itemKey, quantity = 1) {
@@ -208,5 +281,8 @@ module.exports = {
     ensureStarterInventory,
     getItemLabel,
     getItemValue,
-    sellItem
+    sellItem,
+    transferUnits,
+    transferItem,
+    resolveItemKey
 };
