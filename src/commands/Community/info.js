@@ -1,5 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { topics, aliases } = require('../../data/topics.json');
+const { topics } = require('../../data/topics.json');
+const aliases = require('../../data/aliases.json');
+const { getItem, resolveItemKey } = require('../../database/db');
+const { formatItem } = require('../../functions/formatItem');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,6 +14,13 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         let topic = interaction.options.getString('topic').toLowerCase();
+
+        const itemKey = resolveItemKey(topic);
+        const item = getItem(itemKey);
+        if (item) {
+            await interaction.reply(formatItem(item));
+            return;
+        }
 
         if (aliases[topic]) {
             topic = aliases[topic];

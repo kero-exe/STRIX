@@ -1,21 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { getUser, getInventory, addItem, removeItem, getItemLabel, getItemValue, sellItem, transferUnits, transferItem } = require('../../database/db');
-const { topics, aliases } = require('../../data/topics.json');
-
-function resolveItemKey(input) {
-    const normalized = String(input || '').trim().toLowerCase();
-    if (!normalized) return null;
-
-    if (aliases[normalized]) {
-        return aliases[normalized];
-    }
-
-    if (normalized in topics) {
-        return normalized;
-    }
-
-    return null;
-}
+const { getUser, getInventory, addItem, removeItem, getItemLabel, getItemValue, sellItem, transferUnits, transferItem, resolveItemKey } = require('../../database/db');
 
 function hasDmRole(member) {
     if (!member || !member.roles || !member.roles.cache) {
@@ -39,7 +23,11 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('view')
-                .setDescription('View your current inventory'))
+                .setDescription('View your current inventory')
+                .addUserOption(option =>
+                    option.setName('player')
+                        .setDescription('View someone else\'s inventory')
+                        .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('balance')
@@ -124,17 +112,25 @@ module.exports = {
         }
 
         const subcommand = interaction.options.getSubcommand();
-        const targetMember = interaction.options.getUser('player') || interaction.user;
+        const requestedPlayer = interaction.options.getUser('player');
+        const targetMember = requestedPlayer || interaction.user;
         const targetDiscordId = targetMember.id;
         const targetUser = getUser(targetDiscordId);
 
-        if (subcommand === 'add' || subcommand === 'remove') {
+        if ((subcommand === 'add' || subcommand === 'remove') || (subcommand === 'view' && requestedPlayer)) {
             if (!hasDmRole(interaction.member)) {
                 await interaction.reply({
-                    content: 'Only users with the DM role can add or remove inventory items.',
+                    content: 'Only users with the DM role can manage another player inventory.',
                 });
                 return;
             }
+        }
+
+        if (subcommand === 'view' && requestedPlayer && !targetUser) {
+            await interaction.reply({
+                content: `${targetMember.username} is not registered yet.`,
+            });
+            return;
         }
 
         if (subcommand === 'balance') {
@@ -285,7 +281,7 @@ module.exports = {
             return;
         }
 
-        const inventory = getInventory(discordId);
+        const inventory = getInventory(targetDiscordId);
 
         if (!inventory.length) {
             await interaction.reply({
@@ -296,7 +292,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setColor('#00A8E8')
-            .setTitle(`${user.display_name || user.username}'s Inventory`)
+            .setTitle(`${targetUser.display_name || targetUser.username}'s Inventory`)
             .setDescription('Your registered items are listed below.')
             .addFields(
                 inventory.map(item => ({

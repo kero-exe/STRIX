@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { getUser, getInventory, getItemLabel, getItemValue, sellItem } = require('../../database/db');
+const { getUser, getInventory, getItemLabel, getItemValue, sellItem, resolveItemKey } = require('../../database/db');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -25,12 +25,11 @@ module.exports = {
             return;
         }
 
-        const itemKey = interaction.options.getString('item').toLowerCase();
+        const itemKey = interaction.options.getString('item');
         const quantity = interaction.options.getInteger('quantity') || 1;
-        const aliases = require('../../data/topics.json').aliases;
-        const resolvedItem = aliases[itemKey] || itemKey;
+        const resolvedItem = resolveItemKey(itemKey);
 
-        if (!(resolvedItem in require('../../data/topics.json').topics)) {
+        if (!resolvedItem) {
             await interaction.reply({
                 content: 'That item does not exist in the item database.',
             });

@@ -12,7 +12,10 @@ const commandFolders = fs.readdirSync("./src/commands");
 
 (async () => {
     for (file of functions) {
-        require(`./functions/${file}`)(client);
+        const initializer = require(`./functions/${file}`);
+        if (typeof initializer === 'function') {
+            initializer(client);
+        }
     }
     client.handleEvents(eventFiles, "./src/events");
     client.handleCommands(commandFolders, "./src/commands");

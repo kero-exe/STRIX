@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 const path = require('path');
-const { topics } = require('../data/topics.json');
+const aliases = require('../data/aliases.json');
 
 const db = new Database(path.join(__dirname, '../data/strix.db'));
 
@@ -22,6 +22,24 @@ function initDatabase() {
             created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             UNIQUE(discord_id, item_key),
             FOREIGN KEY(discord_id) REFERENCES users(discord_id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE IF NOT EXISTS items (
+            key TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            type TEXT,
+            cost TEXT,
+            damage TEXT,
+            damage_type TEXT,
+            firerate TEXT,
+            magazine TEXT,
+            range_max TEXT,
+            range_min TEXT,
+            properties TEXT,
+            ammo_type TEXT,
+            rarity TEXT,
+            slot TEXT,
+            description TEXT
         );
     `);
 
@@ -139,33 +157,29 @@ function ensureStarterInventory(discordId) {
 }
 
 function getItemValue(itemKey) {
-    const rawEntry = topics[itemKey];
-    if (!rawEntry) {
+    const item = getItem(itemKey);
+    if (!item) {
         return 0;
     }
 
-    const match = rawEntry.match(/(?:\*\*)?Cost(?:\*\*)?\s*:\s*(?:\*\*)?\s*`?\s*([0-9]+(?:\.[0-9]+)?)\s*units?/i);
+    const match = String(item.cost || '').match(/[0-9]+(?:\.[0-9]+)?/);
     if (!match) {
         return 0;
     }
 
-    return Number(match[1]) || 0;
+    return Number(match[0]) || 0;
 }
 
 function resolveItemKey(input) {
-    const { aliases } = require('../data/topics.json');
     const normalized = String(input || '').trim().toLowerCase();
     if (!normalized) return null;
 
-    if (aliases[normalized]) {
-        return aliases[normalized];
-    }
+    const itemKey = aliases[normalized] || normalized;
+    return getItem(itemKey) ? itemKey : null;
+}
 
-    if (normalized in topics) {
-        return normalized;
-    }
-
-    return null;
+function getItem(itemKey) {
+    return db.prepare('SELECT * FROM items WHERE key = ?').get(String(itemKey || '').toLowerCase()) || null;
 }
 
 function transferUnits(fromDiscordId, toDiscordId, amount) {
@@ -261,13 +275,12 @@ function sellItem(discordId, itemKey, quantity = 1) {
 }
 
 function getItemLabel(itemKey) {
-    const rawEntry = topics[itemKey];
-    if (!rawEntry) {
+    const item = getItem(itemKey);
+    if (!item) {
         return itemKey.replace(/_/g, ' ');
     }
 
-    const match = rawEntry.match(/^##\s*(.+)$/m);
-    return match ? match[1] : itemKey.replace(/_/g, ' ');
+    return item.name;
 }
 
 module.exports = {
@@ -279,6 +292,7 @@ module.exports = {
     addItem,
     removeItem,
     ensureStarterInventory,
+    getItem,
     getItemLabel,
     getItemValue,
     sellItem,

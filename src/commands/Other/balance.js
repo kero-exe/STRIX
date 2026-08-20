@@ -21,7 +21,7 @@ module.exports = {
         }
 
         await interaction.reply({
-            content: `${targetUser.username} has **${user.units}** units.`
+            content: `${targetUser.username} has ${user.units} units.`
         });
     }
 };
