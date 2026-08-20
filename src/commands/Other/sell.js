@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 const { getUser, getInventory, getItemLabel, getItemValue, sellItem, resolveItemKey } = require('../../database/db');
 
 module.exports = {
@@ -47,10 +47,52 @@ module.exports = {
         const itemValue = getItemValue(resolvedItem);
         const sellRatio = Number(process.env.SELL_RATIO || '0.5');
         const unitsEarned = Math.floor(itemValue * sellRatio * quantity);
+
+        const confirmationMessage = await interaction.reply({
+            content: `Sell ${quantity}x ${getItemLabel(resolvedItem)} for ${unitsEarned} units?`,
+            components: [new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId('confirm-sell')
+                    .setLabel('Yes')
+                    .setEmoji('✅')
+                    .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                    .setCustomId('cancel-sell')
+                    .setLabel('No')
+                    .setEmoji('❎')
+                    .setStyle(ButtonStyle.Danger),
+            )],
+            fetchReply: true,
+        });
+
+        let confirmation;
+        try {
+            confirmation = await confirmationMessage.awaitMessageComponent({
+                componentType: ComponentType.Button,
+                filter: buttonInteraction => buttonInteraction.user.id === discordId,
+                time: 30_000,
+            });
+        } catch {
+            await interaction.editReply({
+                content: 'Sale cancelled because the confirmation timed out.',
+                components: [],
+            });
+            return;
+        }
+
+        if (confirmation.customId === 'cancel-sell') {
+            await confirmation.update({
+                content: 'Sale cancelled.',
+                components: [],
+            });
+            return;
+        }
+
         const result = sellItem(discordId, resolvedItem, quantity);
 
-        await interaction.reply({
-            content: `Sold ${quantity}x ${getItemLabel(resolvedItem)} for ${result.unitsEarned || unitsEarned} units. You now have ${result.user.units} total units.`
+        await confirmation.update({
+            content: `Sold ${quantity}x ${getItemLabel(resolvedItem)} for ${result.unitsEarned || unitsEarned} units. You now have **${result.user.units}** total units.`,
+            components: [],
         });
     }
 };
