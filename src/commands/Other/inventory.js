@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
-const { getUser, getInventory, addItem, removeItem, getItemLabel, getItemValue, sellItem, transferUnits, transferItem, resolveItemKey } = require('../../database/db');
+const { getUser, getInventory, getEquipment, getItem, addItem, addAmmunition, removeItem, getItemLabel, getItemValue, getAmmunitionLabel, sellItem, transferUnits, transferItem, transferAmmunition, resolveItemKey } = require('../../database/db');
 
 function hasDmRole(member) {
     if (!member || !member.roles || !member.roles.cache) {
@@ -61,6 +61,10 @@ module.exports = {
                     option.setName('item')
                         .setDescription('Item key to give if gifting an item')
                         .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('ammunition')
+                        .setDescription('Ammunition type to give, such as 9mm or .45 ACP')
+                        .setRequired(false))
                 .addIntegerOption(option =>
                     option.setName('amount')
                         .setDescription('Units to give or quantity of the item')
@@ -73,7 +77,11 @@ module.exports = {
                 .addStringOption(option =>
                     option.setName('item')
                         .setDescription('The item key to add')
-                        .setRequired(true))
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('ammunition')
+                        .setDescription('Ammunition type to add, such as 9mm or .45 ACP')
+                        .setRequired(false))
                 .addIntegerOption(option =>
                     option.setName('quantity')
                         .setDescription('How many to add')
@@ -152,12 +160,28 @@ module.exports = {
         if (subcommand === 'give') {
             const targetUser = getUser(targetDiscordId);
             const itemKey = resolveItemKey(interaction.options.getString('item'));
+            const ammunition = interaction.options.getString('ammunition');
             const amount = interaction.options.getInteger('amount') || 1;
 
             if (!targetUser) {
                 await interaction.reply({
                     content: `${targetMember.username} is not registered yet.`,
                 });
+                return;
+            }
+
+            if (itemKey && ammunition) {
+                await interaction.reply({ content: 'Specify either an item or ammunition, not both.' });
+                return;
+            }
+
+            if (ammunition) {
+                const result = transferAmmunition(discordId, targetDiscordId, ammunition, amount);
+                if (!result) {
+                    await interaction.reply({ content: `You do not have enough ${getAmmunitionLabel(`ammo:${ammunition}`)} to give.` });
+                    return;
+                }
+                await interaction.reply({ content: `Gave ${amount}x ${getAmmunitionLabel(`ammo:${ammunition}`)} to ${targetMember.username}.` });
                 return;
             }
 
@@ -199,9 +223,15 @@ module.exports = {
 
         if (subcommand === 'add') {
             const itemKey = resolveItemKey(interaction.options.getString('item'));
+            const ammunition = interaction.options.getString('ammunition');
             const quantity = interaction.options.getInteger('quantity') || 1;
 
-            if (!itemKey) {
+            if (itemKey && ammunition) {
+                await interaction.reply({ content: 'Specify either an item or ammunition, not both.' });
+                return;
+            }
+
+            if (!itemKey && !ammunition) {
                 await interaction.reply({
                     content: 'That item does not exist in the item database.',
                 });
@@ -211,6 +241,14 @@ module.exports = {
             if (!targetUser) {
                 await interaction.reply({
                     content: `${targetMember.username} is not registered yet. Use /register before adding items to them.`,
+                });
+                return;
+            }
+
+            if (ammunition) {
+                addAmmunition(targetDiscordId, ammunition, quantity);
+                await interaction.reply({
+                    content: `Added ${quantity}x ${getAmmunitionLabel(`ammo:${ammunition}`)} to ${targetUser.display_name || targetUser.username}'s inventory.`
                 });
                 return;
             }
@@ -322,26 +360,51 @@ module.exports = {
             return;
         }
 
-        const inventory = getInventory(targetDiscordId);
+        const equipment = getEquipment(targetDiscordId);
+        const equippedKeys = new Set([equipment.primary, equipment.secondary, equipment.gasmask]
+            .filter(Boolean)
+            .map(item => item.item_key));
+        const inventory = getInventory(targetDiscordId)
+            .filter(item => !item.item_key.startsWith('ammo:') && !equippedKeys.has(item.item_key));
 
-        if (!inventory.length) {
+        if (!inventory.length && !equipment.ammunition.length && !equipment.gasmask && !equipment.primary && !equipment.secondary) {
             await interaction.reply({
                 content: 'Your inventory is empty.',
             });
             return;
         }
 
+        const bagValue = inventory.length
+            ? inventory.map(item => {
+                const definition = getItem(item.item_key);
+                const rarity = definition && definition.rarity ? ` [${definition.rarity}]` : '';
+                return `${getItemLabel(item.item_key)}${rarity}: ${item.quantity}x`;
+            }).join('\n')
+            : 'No non-equipped items.';
+
+        const equipmentLabel = entry => {
+            const rarity = entry.item.rarity ? ` [${entry.item.rarity}]` : '';
+            return `${getItemLabel(entry.item_key)}${rarity}`;
+        };
+
         const embed = new EmbedBuilder()
             .setColor('#00A8E8')
             .setTitle(`${targetUser.display_name || targetUser.username}'s Inventory`)
-            .setDescription('Your registered items are listed below.')
-            .addFields(
-                inventory.map(item => ({
-                    name: getItemLabel(item.item_key),
-                    value: `Quantity: ${item.quantity}`,
-                    inline: true
-                }))
-            );
+            .setDescription('Equipment and bag contents.')
+            .addFields({
+                name: 'Equipment',
+                value: [
+                    `Primary: ${equipment.primary ? `${equipmentLabel(equipment.primary)} (${equipment.primary.quantity}x)` : '--'}`,
+                    `Secondary: ${equipment.secondary ? `${equipmentLabel(equipment.secondary)} (${equipment.secondary.quantity}x)` : '--'}`,
+                    `Gasmask: ${equipment.gasmask ? `${equipmentLabel(equipment.gasmask)} (${equipment.gasmaskFilter}% filter)` : '--'}`,
+                    `Ammunition: ${equipment.ammunition.length ? equipment.ammunition.map(ammo => `${ammo.name} (${ammo.quantity})`).join(', ') : '--'}`
+                ].join('\n'),
+                inline: false
+            }, {
+                name: 'Bag',
+                value: bagValue,
+                inline: false
+            });
 
         await interaction.reply({ embeds: [embed] });
     }

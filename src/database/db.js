@@ -91,6 +91,55 @@ function getInventory(discordId) {
     `).all(discordId);
 }
 
+function normalizeAmmunition(ammunition) {
+    const normalized = String(ammunition || '').trim().toLowerCase();
+    return normalized ? `ammo:${normalized}` : null;
+}
+
+function getAmmunitionLabel(itemKey) {
+    const normalized = String(itemKey || '').replace(/^ammo:/i, '').toLowerCase();
+    const knownType = db.prepare('SELECT ammo_type FROM items WHERE lower(ammo_type) LIKE ? LIMIT 1').get(`%${normalized}%`);
+    if (knownType) {
+        const match = knownType.ammo_type.split(',').find(type => type.trim().toLowerCase() === normalized);
+        if (match) return match.trim();
+    }
+
+    return normalized;
+}
+
+function addAmmunition(discordId, ammunition, quantity = 1) {
+    const ammoKey = normalizeAmmunition(ammunition);
+    if (!ammoKey) throw new Error('Ammunition is required.');
+    return addItem(discordId, ammoKey, quantity);
+}
+
+function transferAmmunition(fromDiscordId, toDiscordId, ammunition, quantity = 1) {
+    const ammoKey = normalizeAmmunition(ammunition);
+    if (!ammoKey) throw new Error('Ammunition is required.');
+    return transferItem(fromDiscordId, toDiscordId, ammoKey, quantity);
+}
+
+function getEquipment(discordId) {
+    const ownedItems = getInventory(discordId)
+        .filter(entry => !entry.item_key.startsWith('ammo:'))
+        .map(entry => ({ ...entry, item: getItem(entry.item_key) }))
+        .filter(entry => entry.item);
+    const ammunition = getInventory(discordId)
+        .filter(entry => entry.item_key.startsWith('ammo:'))
+        .map(entry => ({
+            name: getAmmunitionLabel(entry.item_key),
+            quantity: entry.quantity
+        }));
+
+    return {
+        primary: ownedItems.find(entry => entry.item.type && entry.item.type !== 'Handgun') || null,
+        secondary: ownedItems.find(entry => entry.item.type === 'Handgun') || null,
+        gasmask: ownedItems.find(entry => entry.item.slot === 'Face') || null,
+        gasmaskFilter: ownedItems.some(entry => entry.item.slot === 'Face') ? 100 : 0,
+        ammunition
+    };
+}
+
 function addItem(discordId, itemKey, quantity = 1) {
     if (!discordId || !itemKey) {
         throw new Error('discordId and itemKey are required.');
@@ -289,7 +338,9 @@ module.exports = {
     getUser,
     registerUser,
     getInventory,
+    getEquipment,
     addItem,
+    addAmmunition,
     removeItem,
     ensureStarterInventory,
     getItem,
@@ -298,5 +349,7 @@ module.exports = {
     sellItem,
     transferUnits,
     transferItem,
+    transferAmmunition,
+    getAmmunitionLabel,
     resolveItemKey
 };
