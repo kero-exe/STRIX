@@ -2,6 +2,10 @@ function formatItem(item) {
     const lines = [`## ${item.name}`];
     if (item.rarity) lines.push(`**Rarity:** \`${item.rarity}\``);
     if (item.slot) lines.push(`**Slot:** \`${item.slot}\``);
+    if (item.category === 'sellable') {
+        lines.push(`**Cost:** \`${item.cost || '--'} units\``);
+        return lines.join('\n');
+    }
     if (item.type) {
         const fields = [
             ['Type', item.type], ['Cost', item.cost ? `${item.cost} units` : '--'],
