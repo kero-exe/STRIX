@@ -401,7 +401,7 @@ module.exports = {
                 ].join('\n'),
                 inline: false
             }, {
-                name: 'Bag',
+                name: 'Go-Bag',
                 value: bagValue,
                 inline: false
             });
