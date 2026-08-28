@@ -32,6 +32,7 @@ function initDatabase() {
             damage TEXT,
             damage_type TEXT,
             firerate TEXT,
+            fire_mode TEXT,
             magazine TEXT,
             range_max TEXT,
             range_min TEXT,
@@ -40,6 +41,20 @@ function initDatabase() {
             rarity TEXT,
             slot TEXT,
             description TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS weapons (
+            key TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            weapon_type TEXT,
+            cost TEXT,
+            damage TEXT,
+            fire_mode TEXT,
+            magazine TEXT,
+            range TEXT,
+            properties TEXT,
+            ammo TEXT,
+            rarity TEXT
         );
 
         CREATE TABLE IF NOT EXISTS sellables (
@@ -67,6 +82,13 @@ function initDatabase() {
         db.exec('ALTER TABLE users ADD COLUMN units INTEGER NOT NULL DEFAULT 0');
     }
 
+    const itemColumns = db.prepare('PRAGMA table_info(items)').all();
+    if (!itemColumns.some(column => column.name === 'fire_mode')) {
+        db.exec('ALTER TABLE items ADD COLUMN fire_mode TEXT');
+        db.exec('UPDATE items SET fire_mode = firerate WHERE fire_mode IS NULL');
+    }
+
+    migrateEquipmentTable();
     migrateLegacyEquipment();
 }
 
@@ -96,7 +118,6 @@ function registerUser({ discordId, username, displayName }) {
         displayName: finalDisplayName
     });
 
-    ensureStarterInventory(discordId);
     return getUser(discordId);
 }
 
@@ -112,14 +133,59 @@ function getInventory(discordId) {
 
 function normalizeAmmunition(ammunition) {
     const normalized = String(ammunition || '').trim().toLowerCase();
-    return normalized ? `ammo:${normalized}` : null;
+    if (!normalized) return null;
+
+    const ammunitionAliases = {
+        '9mm': '9mm',
+        '.45 acp': '45acp',
+        '45 acp': '45acp',
+        '45acp': '45acp',
+        '.32 acp': '32acp',
+        '32 acp': '32acp',
+        '32acp': '32acp',
+        '.357 mag': '44mag',
+        '357 mag': '44mag',
+        '.50 ae': '44mag',
+        '50 ae': '44mag',
+        '44mag': '44mag',
+        '5.7x28mm': '5.7mm',
+        '5.7x28': '5.7mm',
+        '5.7mm': '5.7mm',
+        '.300 blk': '300blk',
+        '300 blk': '300blk',
+        '300blk': '300blk',
+        '5.45x39mm': '5.45mm',
+        '5.45x39': '5.45mm',
+        '5.45mm': '5.45mm',
+        '5.56x45mm': '5.56mm',
+        '5.56x45': '5.56mm',
+        '5.56mm': '5.56mm',
+        '.40 s&w': '40s&w',
+        '40 s&w': '40s&w',
+        '40s&w': '40s&w',
+        '.22 lr': '22lr',
+        '22 lr': '22lr',
+        '22lr': '22lr',
+        '.22 wmr': '22wmr',
+        '22 wmr': '22wmr',
+        '22wmr': '22wmr',
+        '--': 'special',
+        'special': 'special'
+    };
+
+    return `ammo:${ammunitionAliases[normalized] || 'special'}`;
 }
 
 function getAmmunitionLabel(itemKey) {
     const normalized = String(itemKey || '').replace(/^ammo:/i, '').toLowerCase();
-    const knownType = db.prepare('SELECT ammo_type FROM items WHERE lower(ammo_type) LIKE ? LIMIT 1').get(`%${normalized}%`);
+    const knownType = db.prepare(`
+        SELECT ammo_type AS ammunition FROM items WHERE lower(ammo_type) LIKE ?
+        UNION ALL
+        SELECT ammo AS ammunition FROM weapons WHERE lower(ammo) LIKE ?
+        LIMIT 1
+    `).get(`%${normalized}%`, `%${normalized}%`);
     if (knownType) {
-        const match = knownType.ammo_type.split(',').find(type => type.trim().toLowerCase() === normalized);
+        const match = knownType.ammunition.split(',').find(type => type.trim().toLowerCase() === normalized);
         if (match) return match.trim();
     }
 
@@ -144,12 +210,11 @@ function getEquipment(discordId) {
         .map(entry => ({ ...entry, item: getItem(entry.item_key) }))
         .filter(entry => entry.item);
     const equipped = db.prepare(`
-        SELECT e.slot AS equipped_slot, e.item_key, i.quantity, d.*
+        SELECT e.slot AS equipped_slot, e.item_key, i.quantity
         FROM equipment e
         INNER JOIN inventory i ON i.discord_id = e.discord_id AND i.item_key = e.item_key
-        INNER JOIN items d ON d.key = e.item_key
         WHERE e.discord_id = ?
-    `).all(discordId);
+    `).all(discordId).map(entry => ({ ...entry, ...getItem(entry.item_key) }));
     const ammunition = getInventory(discordId)
         .filter(entry => entry.item_key.startsWith('ammo:'))
         .map(entry => ({
@@ -169,6 +234,28 @@ function getEquipment(discordId) {
         gasmaskFilter: equipmentBySlot('gasmask') ? 100 : 0,
         ammunition
     };
+}
+
+function migrateEquipmentTable() {
+    const foreignKeys = db.prepare('PRAGMA foreign_key_list(equipment)').all();
+    if (!foreignKeys.some(foreignKey => foreignKey.table === 'items')) return;
+
+    db.exec('PRAGMA foreign_keys = OFF');
+    db.exec(`
+        CREATE TABLE equipment_without_item_fk (
+            discord_id TEXT NOT NULL,
+            slot TEXT NOT NULL,
+            item_key TEXT NOT NULL,
+            PRIMARY KEY(discord_id, slot),
+            UNIQUE(discord_id, item_key),
+            FOREIGN KEY(discord_id) REFERENCES users(discord_id) ON DELETE CASCADE
+        );
+        INSERT INTO equipment_without_item_fk (discord_id, slot, item_key)
+            SELECT discord_id, slot, item_key FROM equipment;
+        DROP TABLE equipment;
+        ALTER TABLE equipment_without_item_fk RENAME TO equipment;
+    `);
+    db.exec('PRAGMA foreign_keys = ON');
 }
 
 function migrateLegacyEquipment() {
@@ -267,19 +354,6 @@ function removeItem(discordId, itemKey, quantity = 1) {
     return getInventory(discordId);
 }
 
-function ensureStarterInventory(discordId) {
-    const starterItems = ['gasmask', '1911', 'mp5'];
-
-    for (const itemKey of starterItems) {
-        const existing = db.prepare('SELECT 1 FROM inventory WHERE discord_id = ? AND item_key = ?').get(discordId, itemKey);
-        if (!existing) {
-            addItem(discordId, itemKey, 1);
-        }
-    }
-
-    return getInventory(discordId);
-}
-
 function getItemValue(itemKey) {
     const item = getItem(itemKey);
     if (!item) {
@@ -305,7 +379,15 @@ function resolveItemKey(input) {
 function getItem(itemKey) {
     const normalizedKey = String(itemKey || '').toLowerCase();
     return db.prepare(`
-        SELECT *, 'item' AS category FROM items WHERE key = ?
+        SELECT key, name, type, cost, damage, damage_type,
+            COALESCE(fire_mode, firerate) AS firerate, magazine, range_max, range_min,
+            properties, ammo_type, rarity, slot, description, 'item' AS category
+        FROM items WHERE key = ?
+        UNION ALL
+        SELECT key, name, weapon_type AS type, cost, damage, NULL AS damage_type,
+            fire_mode AS firerate, magazine, NULL AS range_max, range AS range_min,
+            properties, ammo, rarity, NULL AS slot, NULL AS description, 'weapon' AS category
+        FROM weapons WHERE key = ?
         UNION ALL
         SELECT key, name, NULL AS type, cost, NULL AS damage, NULL AS damage_type,
             NULL AS firerate, NULL AS magazine, NULL AS range_max, NULL AS range_min,
@@ -313,7 +395,7 @@ function getItem(itemKey) {
             NULL AS description, 'sellable' AS category
         FROM sellables WHERE key = ?
         LIMIT 1
-    `).get(normalizedKey, normalizedKey) || null;
+    `).get(normalizedKey, normalizedKey, normalizedKey) || null;
 }
 
 function transferUnits(fromDiscordId, toDiscordId, amount) {
@@ -429,7 +511,6 @@ module.exports = {
     addItem,
     addAmmunition,
     removeItem,
-    ensureStarterInventory,
     getItem,
     getItemLabel,
     getItemValue,

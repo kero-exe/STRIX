@@ -1,10 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getUser, unequipItem, getItemLabel } = require('../../database/db');
 
-function hasDmRole(member) {
+function hasCoordinatorRole(member) {
     if (!member || !member.roles || !member.roles.cache) return false;
-    const roleId = process.env.DM_ROLE_ID;
-    const roleName = (process.env.DM_ROLE_NAME || 'DM').toLowerCase();
+    const roleId = process.env.COORDINATOR_ROLE_ID;
+    const roleName = (process.env.COORDINATOR_ROLE_NAME || 'Coordinator').toLowerCase();
     return member.roles.cache.some(role => (roleId && role.id === roleId) || role.name.toLowerCase() === roleName);
 }
 
@@ -22,12 +22,12 @@ module.exports = {
             .setRequired(true))
         .addUserOption(option => option
             .setName('player')
-            .setDescription('The player whose equipment to change (DM only)')
+            .setDescription('The player whose equipment to change (Coordinator only)')
             .setRequired(false)),
     async execute(interaction) {
         const requestedPlayer = interaction.options.getUser('player');
-        if (requestedPlayer && !hasDmRole(interaction.member)) {
-            await interaction.reply({ content: 'Only users with the DM role can manage another player equipment.' });
+        if (requestedPlayer && !hasCoordinatorRole(interaction.member)) {
+            await interaction.reply({ content: 'Only users with the Coordinator role can manage another player equipment.' });
             return;
         }
 

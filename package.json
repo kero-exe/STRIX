@@ -4,7 +4,10 @@
   "main": "src/index.js",
   "scripts": {
     "test": "node src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "split-data": "node scripts/split-weapons.js",
+    "import-items": "node scripts/import-items.js",
+    "import-weapons": "node scripts/import-weapons.js"
   },
   "author": "Kero",
   "license": "ISC",

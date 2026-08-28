@@ -48,7 +48,7 @@ module.exports = {
         const sellRatio = Number(process.env.SELL_RATIO || '0.5');
         const unitsEarned = Math.floor(itemValue * sellRatio * quantity);
 
-        const confirmationMessage = await interaction.reply({
+        await interaction.reply({
             content: `Sell ${quantity}x ${getItemLabel(resolvedItem)} for ${unitsEarned} units?`,
             components: [new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
@@ -62,8 +62,8 @@ module.exports = {
                     .setEmoji('❎')
                     .setStyle(ButtonStyle.Danger),
             )],
-            fetchReply: true,
         });
+        const confirmationMessage = await interaction.fetchReply();
 
         let confirmation;
         try {

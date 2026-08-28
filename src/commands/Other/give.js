@@ -15,7 +15,7 @@ module.exports = {
                 .setRequired(false))
         .addStringOption(option =>
             option.setName('ammunition')
-                .setDescription('Ammunition type to give, such as 9mm or .45 ACP')
+                .setDescription('Ammunition type to give, such as 9mm or 45ACP')
                 .setRequired(false))
         .addIntegerOption(option =>
             option.setName('amount')
