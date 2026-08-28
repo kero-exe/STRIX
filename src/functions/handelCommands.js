@@ -2,11 +2,15 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 
-const clientId = '1233681236602392636'; 
-const guildId = '1232191648671465472'; 
+const clientId = process.env.DISCORD_CLIENT_ID;
 
 module.exports = (client) => {
     client.handleCommands = async (commandFolders, path) => {
+        if (!clientId) {
+            console.error('DISCORD_CLIENT_ID is not configured; slash commands were not registered.');
+            return;
+        }
+
         client.commandArray = [];
         for (folder of commandFolders) {
             const commandFiles = fs.readdirSync(`${path}/${folder}`).filter(file => file.endsWith('.js'));

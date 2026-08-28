@@ -5,6 +5,8 @@
   "scripts": {
     "test": "node src/index.js",
     "start": "node src/index.js",
+    "start:activity": "node src/activity/server.js",
+    "dev": "node src/index.js",
     "split-data": "node scripts/split-weapons.js",
     "import-items": "node scripts/import-items.js",
     "import-weapons": "node scripts/import-weapons.js"
@@ -13,12 +15,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@discord/embedded-app-sdk": "^2.5.0",
     "@discordjs/builders": "^1.8.0",
     "@discordjs/rest": "^2.4.0",
     "better-sqlite3": "^13.0.3",
     "discord-api-types": "^0.37.118",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
+    "express": "^5.2.1",
     "xlsx": "^0.18.5"
   }
 }

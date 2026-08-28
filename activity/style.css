@@ -1,0 +1,26 @@
+:root {
+    color-scheme: dark;
+    --ink: #e9f1ed;
+    --muted: #92a49c;
+    --accent: #e1ff57;
+    --panel: rgba(18, 31, 29, 0.86);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    background: radial-gradient(circle at 15% 10%, #24463e, transparent 38%), #081210;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.shell { width: min(90vw, 640px); padding: 3rem 0; }
+.eyebrow, .label { color: var(--accent); font: 700 0.72rem/1.2 Arial, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; }
+h1 { margin: 1rem 0 0.75rem; font-size: clamp(3rem, 10vw, 6.5rem); line-height: 0.9; font-weight: 400; }
+#status { color: var(--muted); font: 1rem/1.5 Arial, sans-serif; }
+.agent-card { margin-top: 2.5rem; padding: 1.25rem; border: 1px solid #3b5c50; background: var(--panel); }
+.agent-card strong { display: block; margin-top: 0.6rem; font-size: 1.5rem; font-weight: 400; }
