@@ -7,14 +7,40 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <main class="shell">
-        <p class="eyebrow">STRIX // FIELD NETWORK</p>
-        <h1>Activity online.</h1>
-        <p id="status">Connecting to Discord...</p>
-        <section id="agent-card" class="agent-card" hidden>
-            <span class="label">Authenticated agent</span>
-            <strong id="agent-name"></strong>
+    <div id="intro-overlay" class="intro-overlay" aria-hidden="true">
+        <video id="intro-video" class="intro-video" autoplay muted playsinline>
+            <source src="/bg/intro_1080p.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        Dark theme
+    </button>
+
+    <main class="layout" id="layout-panel-group">
+        <section class="shell">
+            <p class="eyebrow">STRIX // FIELD NETWORK</p>
+            <h1>Activity online.</h1>
+            <p id="status">Connecting to Discord...</p>
+            <section id="agent-card" class="agent-card" hidden>
+                <span class="label">Authenticated agent</span>
+                <strong id="agent-name"></strong>
+            </section>
         </section>
+
+        <div class="quick-links" aria-label="STRIX quick links">
+            <button type="button" class="quick-link dark-panel">
+                <span class="quick-link__eyebrow">Map</span>
+                <strong>Interactive Map</strong>
+                <small>View the Interactive Map of NYC</small>
+            </button>
+
+            <button type="button" class="quick-link dark-panel">
+                <span class="quick-link__eyebrow">Operations</span>
+                <strong>Operations</strong>
+                <small>Play, spectate or view the schedules of operations</small>
+            </button>
+        </div>
     </main>
     <script type="module" src="/main.js"></script>
 </body>

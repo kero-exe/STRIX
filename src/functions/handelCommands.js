@@ -29,9 +29,15 @@ module.exports = (client) => {
             try {
                 console.log('Started refreshing application (/) commands.');
 
+                const existingCommands = await rest.get(Routes.applicationCommands(clientId));
+                const entryPointCommand = existingCommands.find(command => command.type === 4);
+                const commands = entryPointCommand
+                    ? [...client.commandArray, entryPointCommand]
+                    : client.commandArray;
+
                 await rest.put(
                     Routes.applicationCommands(clientId), {
-                        body: client.commandArray
+                        body: commands
                     },
                 );
 

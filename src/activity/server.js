@@ -1,10 +1,13 @@
 const express = require('express');
+const fs = require('fs');
+const https = require('https');
 const path = require('path');
 const { URLSearchParams } = require('url');
 
 require('dotenv').config();
 
 const activityRoot = path.join(__dirname, '..', '..', 'activity');
+const projectRoot = path.join(__dirname, '..', '..');
 
 function createActivityServer() {
     const app = express();
@@ -61,11 +64,33 @@ function createActivityServer() {
 
 function startActivityServer() {
     const port = Number(process.env.ACTIVITY_PORT || 3000);
-    const host = process.env.ACTIVITY_HOST || '0.0.0.0';
-    const server = createActivityServer().listen(port, host, () => {
-        console.log(`Activity server listening on http://localhost:${port}`);
+    const host = process.env.ACTIVITY_HOST || 'localhost';
+    const certPath = path.resolve(projectRoot, process.env.ACTIVITY_TLS_CERT_PATH || 'localhost+1.pem');
+    const keyPath = path.resolve(projectRoot, process.env.ACTIVITY_TLS_KEY_PATH || 'localhost+1-key.pem');
+    const certificateFilesPresent = fs.existsSync(certPath) && fs.existsSync(keyPath);
+    const useHttps = process.env.ACTIVITY_USE_HTTPS !== 'false' && certificateFilesPresent;
+
+    if (process.env.ACTIVITY_USE_HTTPS === 'true' && !certificateFilesPresent) {
+        throw new Error(`HTTPS was requested, but the certificate files were not found at ${certPath} and ${keyPath}.`);
+    }
+
+    const app = createActivityServer();
+    const server = useHttps
+        ? https.createServer({
+            cert: fs.readFileSync(certPath),
+            key: fs.readFileSync(keyPath)
+        }, app)
+        : app;
+
+    server.listen(port, host, () => {
+        const protocol = useHttps ? 'https' : 'http';
+        console.log(`Activity server listening on ${protocol}://localhost:${port}`);
     });
     return server;
 }
 
 module.exports = { createActivityServer, startActivityServer };
+
+if (require.main === module) {
+    startActivityServer();
+}
