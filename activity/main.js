@@ -9,6 +9,7 @@ const introOverlay = document.querySelector('#intro-overlay');
 const introVideo = document.querySelector('#intro-video');
 const shell = document.querySelector('.shell');
 const quickLinks = document.querySelectorAll('.quick-link');
+const mapButton = document.querySelector('#map-button');
 
 function setStatus(message) {
     status.textContent = message;
@@ -82,6 +83,13 @@ if (introOverlay && introVideo) {
             introOverlay.style.display = 'none';
         }, 700);
     }, 2000);
+}
+
+if (mapButton) {
+    mapButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = '/map.html';
+    });
 }
 
 async function start() {

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STRIX Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="theme-dark">
+    <main class="map-page">
+        <header class="map-page__header">
+            <div>
+                <p class="eyebrow">STRIX // MANHATTAN</p>
+                <h1>Interactive Map</h1>
+            </div>
+            <nav class="map-page__nav" aria-label="Map navigation">
+                <a href="/" class="map-page__back">Back to hub</a>
+            </nav>
+        </header>
+
+        <section class="map-shell map-shell--page" aria-label="STRIX district map">
+            <div class="district-map-wrap">
+                <div id="district-map" class="district-map district-map--page" aria-label="Interactive map for STRIX districts"></div>
+                <button id="map-3d-toggle" class="map-3d-toggle" type="button" aria-pressed="false">
+                    View in 3D
+                </button>
+                <div id="cursor-coordinates" class="cursor-coordinates" aria-live="polite">Lat: --, Lng: --</div>
+            </div>
+
+            <aside id="district-panel" class="district-panel district-panel--page" aria-live="polite">
+                <p class="district-panel__eyebrow">District overview</p>
+                <h3 id="district-name">Select a district</h3>
+                <dl class="district-metrics">
+                    <div>
+                        <dt>Status</dt>
+                        <dd id="district-status">Unknown</dd>
+                    </div>
+                    <div>
+                        <dt>Threat</dt>
+                        <dd id="district-threat">--</dd>
+                    </div>
+                    <div>
+                        <dt>Locations</dt>
+                        <dd id="district-locations">0</dd>
+                    </div>
+                    <div>
+                        <dt>Missions</dt>
+                        <dd id="district-missions">0</dd>
+                    </div>
+                </dl>
+                <p id="district-summary" class="district-summary">
+                    Hover or click a district to inspect the current STRIX operational picture.
+                </p>
+            </aside>
+        </section>
+    </main>
+
+    <script defer src="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.js" crossorigin="anonymous"></script>
+    <script defer type="module" src="/map-loader.js"></script>
+</body>
+</html>

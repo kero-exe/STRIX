@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>STRIX Activity</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.css" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -29,11 +30,11 @@
         </section>
 
         <div class="quick-links" aria-label="STRIX quick links">
-            <button type="button" class="quick-link dark-panel">
+            <a href="/map.html" class="quick-link dark-panel" id="map-button">
                 <span class="quick-link__eyebrow">Map</span>
                 <strong>Interactive Map</strong>
                 <small>View the Interactive Map of NYC</small>
-            </button>
+            </a>
 
             <button type="button" class="quick-link dark-panel">
                 <span class="quick-link__eyebrow">Operations</span>

@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const activityRoot = path.join(__dirname, '..', '..', 'activity');
 const projectRoot = path.join(__dirname, '..', '..');
+let activityServerInstance = null;
 
 function createActivityServer() {
     const app = express();
@@ -56,6 +57,15 @@ function createActivityServer() {
     });
 
     app.get('/health', (request, response) => response.json({ ok: true }));
+    app.get('/api/districts', (request, response) => {
+        try {
+            const districts = JSON.parse(fs.readFileSync(path.join(projectRoot, 'src', 'data', 'districts.geojson'), 'utf8'));
+            response.json(districts);
+        } catch (error) {
+            console.error('Failed to read district GeoJSON:', error);
+            response.status(500).json({ error: 'District data is unavailable.' });
+        }
+    });
     app.use(express.static(activityRoot));
     app.get('*splat', (request, response) => response.sendFile(path.join(activityRoot, 'index.html')));
 
@@ -63,6 +73,10 @@ function createActivityServer() {
 }
 
 function startActivityServer() {
+    if (activityServerInstance && activityServerInstance.listening) {
+        return activityServerInstance;
+    }
+
     const port = Number(process.env.ACTIVITY_PORT || 3000);
     const host = process.env.ACTIVITY_HOST || 'localhost';
     const certPath = path.resolve(projectRoot, process.env.ACTIVITY_TLS_CERT_PATH || 'localhost+1.pem');
@@ -82,10 +96,22 @@ function startActivityServer() {
         }, app)
         : app;
 
-    server.listen(port, host, () => {
-        const protocol = useHttps ? 'https' : 'http';
-        console.log(`Activity server listening on ${protocol}://localhost:${port}`);
+    server.on('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+            console.warn(`Port ${port} is already in use; reusing the active STRIX activity server if present.`);
+            return;
+        }
+
+        throw error;
     });
+
+    server.listen(port, host, () => {
+        activityServerInstance = server;
+        const protocol = useHttps ? 'https' : 'http';
+        console.log(`Activity server listening on ${protocol}://${host}:${port}`);
+    });
+
+    activityServerInstance = server;
     return server;
 }
 
