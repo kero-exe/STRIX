@@ -11,7 +11,8 @@
     "import-items": "node scripts/import-items.js",
     "import-weapons": "node scripts/import-weapons.js",
     "generate-agent-profiles": "node scripts/generate-agent-profiles.js",
-    "import-agent-profiles": "node scripts/import-agent-profiles.js"
+    "import-agent-profiles": "node scripts/import-agent-profiles.js",
+    "preview-agent-card": "node scripts/preview-agent-card.js"
   },
   "author": "Kero",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@discord/embedded-app-sdk": "^2.5.0",
     "@discordjs/builders": "^1.8.0",
     "@discordjs/rest": "^2.4.0",
+    "@napi-rs/canvas": "^1.0.8",
     "better-sqlite3": "^13.0.3",
     "discord-api-types": "^0.37.118",
     "discord.js": "^14.18.0",
