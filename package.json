@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "test": "node src/index.js",
+    "test": "node --test tests/agent.test.js",
     "start": "node src/index.js",
     "start:activity": "node src/activity/server.js",
     "dev": "node src/index.js",
     "split-data": "node scripts/split-weapons.js",
     "import-items": "node scripts/import-items.js",
-    "import-weapons": "node scripts/import-weapons.js"
+    "import-weapons": "node scripts/import-weapons.js",
+    "generate-agent-profiles": "node scripts/generate-agent-profiles.js",
+    "import-agent-profiles": "node scripts/import-agent-profiles.js"
   },
   "author": "Kero",
   "license": "ISC",
@@ -23,6 +25,7 @@
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
+    "sharp": "^0.35.4",
     "xlsx": "^0.18.5"
   }
 }

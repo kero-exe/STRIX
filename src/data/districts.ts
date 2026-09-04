@@ -1,6 +1,11 @@
 export type DistrictStatus = 'DISCOVERED' | 'CONTESTED' | 'ACTIVE' | 'UNKNOWN';
 
-export interface DistrictProperties {
+export interface DistrictGeometryProperties {
+  id: string;
+  name: string;
+}
+
+export interface DistrictData {
   id: string;
   name: string;
   status: DistrictStatus;
@@ -18,7 +23,7 @@ export interface DistrictGeometry {
 export interface DistrictFeature {
   type: 'Feature';
   id?: string;
-  properties: DistrictProperties;
+  properties: DistrictGeometryProperties;
   geometry: DistrictGeometry;
 }
 

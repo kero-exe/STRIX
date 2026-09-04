@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { registerUser, getUser } = require('../../database/db');
+const { registerUser, getUser, ensureAgentProfile, updateAgentProfile } = require('../../database/db');
 
 function findAgentRole(guild) {
     if (!guild || !guild.roles || !guild.roles.cache) return null;
@@ -12,17 +12,32 @@ function findAgentRole(guild) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('register')
-        .setDescription('Authorize an Agent to STRIX'),
+        .setDescription('Authorize an Agent to STRIX')
+        .addStringOption(option => option.setName('surname').setDescription('Fictional agent surname'))
+        .addStringOption(option => option.setName('first_name').setDescription('Fictional agent first name'))
+        .addStringOption(option => option.setName('sex').setDescription('Agent sex'))
+        .addStringOption(option => option.setName('date_of_birth').setDescription('Date of birth'))
+        .addStringOption(option => option.setName('specialty').setDescription('Occupational specialty')),
     async execute(interaction) {
         const discordId = interaction.user.id;
         const username = interaction.user.username;
         const displayName = interaction.user.globalName || interaction.user.username;
 
+        const agentFields = {
+            surname: interaction.options.getString('surname') || undefined,
+            firstName: interaction.options.getString('first_name') || undefined,
+            sex: interaction.options.getString('sex') || undefined,
+            dateOfBirth: interaction.options.getString('date_of_birth') || undefined,
+            occupationalSpecialty: interaction.options.getString('specialty') || undefined
+        };
+
         const existing = getUser(discordId);
 
         if (existing) {
+            ensureAgentProfile(discordId);
+            updateAgentProfile(discordId, agentFields);
             await interaction.reply({
-                content: `Agent ${displayName} has already been authorized.`
+                content: `Agent ${displayName} has already been authorized. Your SHD ID is ${getUserAgentId(discordId)}.`
             });
             return;
         }
@@ -32,6 +47,7 @@ module.exports = {
             username,
             displayName
         });
+        const agent = ensureAgentProfile(discordId, agentFields);
 
         const agentRole = findAgentRole(interaction.guild);
         if (!agentRole) {
@@ -46,7 +62,11 @@ module.exports = {
         }
 
         await interaction.reply({
-            content: `✅ Agent ${displayName} has been authorized to STRIX. Welcome to the Division agent!`
+            content: `✅ Agent ${displayName} has been authorized to STRIX. SHD ID: ${agent.shd_id}. Welcome to the Division agent!`
         });
     }
 };
+
+function getUserAgentId(discordId) {
+    return ensureAgentProfile(discordId).shd_id;
+}

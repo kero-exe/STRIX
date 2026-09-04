@@ -1,7 +1,8 @@
 const districtGeoJsonUrl = '/api/districts';
+const districtDataUrl = '/api/district-data';
 const mapStyleUrl = '/map-style.json';
 
-function updateDistrictPanel(feature) {
+function updateDistrictPanel(district) {
   const nameEl = document.getElementById('district-name');
   const statusEl = document.getElementById('district-status');
   const threatEl = document.getElementById('district-threat');
@@ -9,7 +10,7 @@ function updateDistrictPanel(feature) {
   const missionsEl = document.getElementById('district-missions');
   const summaryEl = document.getElementById('district-summary');
 
-  if (!feature) {
+  if (!district) {
     if (nameEl) nameEl.textContent = 'Select a district';
     if (statusEl) statusEl.textContent = 'Unknown';
     if (threatEl) threatEl.textContent = '--';
@@ -19,13 +20,12 @@ function updateDistrictPanel(feature) {
     return;
   }
 
-  const properties = feature.properties || {};
-  if (nameEl) nameEl.textContent = properties.name || 'District';
-  if (statusEl) statusEl.textContent = properties.status || 'Unknown';
-  if (threatEl) threatEl.textContent = properties.threat || '--';
-  if (locationsEl) locationsEl.textContent = String(properties.locations ?? 0);
-  if (missionsEl) missionsEl.textContent = String(properties.missions ?? 0);
-  if (summaryEl) summaryEl.textContent = properties.summary || 'No district summary available.';
+  if (nameEl) nameEl.textContent = district.name || 'District';
+  if (statusEl) statusEl.textContent = district.status || 'Unknown';
+  if (threatEl) threatEl.textContent = district.threat || '--';
+  if (locationsEl) locationsEl.textContent = String(district.locations ?? 0);
+  if (missionsEl) missionsEl.textContent = String(district.missions ?? 0);
+  if (summaryEl) summaryEl.textContent = district.summary || 'No district summary available.';
 }
 
 export async function initDistrictMap({ container, defaultCenter, defaultZoom, minZoom, maxZoom }) {
@@ -89,21 +89,38 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
 
   map.on('load', async () => {
     let districtGeoJson;
+    let districtData;
 
     try {
-      const response = await fetch(districtGeoJsonUrl);
-      if (!response.ok) {
-        throw new Error(`District GeoJSON request failed with status ${response.status}.`);
+      const [geometryResponse, dataResponse] = await Promise.all([
+        fetch(districtGeoJsonUrl),
+        fetch(districtDataUrl)
+      ]);
+      if (!geometryResponse.ok || !dataResponse.ok) {
+        throw new Error(`District API request failed with status ${geometryResponse.status}/${dataResponse.status}.`);
       }
-      const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('json')) {
-        throw new Error(`District GeoJSON returned ${contentType || 'an unknown content type'}, not JSON.`);
-      }
-      districtGeoJson = await response.json();
+      [districtGeoJson, districtData] = await Promise.all([
+        geometryResponse.json(),
+        dataResponse.json()
+      ]);
     } catch (error) {
-      console.error('Failed to load district GeoJSON.', error);
+      console.error('Failed to load district geometry and data.', error);
       return;
     }
+
+    const districtDataById = new Map((districtData.districts || []).map(district => [district.id, district]));
+    const getDistrict = feature => {
+      const districtId = feature.id || feature.properties?.id;
+      return districtDataById.get(districtId) || {
+        id: districtId,
+        name: feature.properties?.name || 'District',
+        status: 'Unknown',
+        threat: '--',
+        locations: 0,
+        missions: 0,
+        summary: 'No district data available.'
+      };
+    };
 
     map.addSource('strix-districts', {
       type: 'geojson',
@@ -221,7 +238,7 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
           const feature = features[0];
           const featureId = feature.id || feature.properties?.id || null;
           setHoverState(featureId);
-          updateDistrictPanel(feature);
+          updateDistrictPanel(getDistrict(feature));
           return;
         }
 
@@ -271,7 +288,7 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
       }
 
       setSelectedState(featureId);
-      updateDistrictPanel(feature);
+      updateDistrictPanel(getDistrict(feature));
     });
 
   });

@@ -1,1 +1,1008 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.973503,40.763641],[-73.949232,40.796895],[-73.958152,40.800644],[-73.981644,40.768384],[-73.982365,40.767401],[-73.97669,40.765011],[-73.973503,40.763641]]]},"properties":{"id":"central_park","name":"Central Park","status":"DISCOVERED","threat":"Low","locations":5,"missions":2,"summary":"A broad park corridor with clear sightlines, controlled access paths, and strong defensive angles."},"id":"central_park"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.958152,40.800644],[-73.949232,40.796895],[-73.944626,40.803227],[-73.942994,40.802546],[-73.941147,40.805066],[-73.942759,40.80574],[-73.933792,40.818157],[-73.934221,40.82455],[-73.934617,40.828048],[-73.949597,40.834348],[-73.95065,40.831333],[-73.952095,40.829081],[-73.954724,40.826086],[-73.961014,40.818593],[-73.958289,40.815691],[-73.959639,40.813775],[-73.956825,40.812624],[-73.957794,40.811267],[-73.95497,40.810059],[-73.958176,40.805505],[-73.95823,40.803103],[-73.959615,40.801202],[-73.958152,40.800644]]]},"properties":{"id":"harlem","name":"Harlem","status":"UNKNOWN","threat":"--","locations":4,"missions":1,"summary":"Northward avenues and residential blocks with mixed visibility and sporadic surveillance."},"id":"harlem"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.984765,40.769232],[-73.984324,40.769842],[-73.98222,40.768934],[-73.982224,40.768352],[-73.981644,40.768384],[-73.975969,40.776226],[-73.98817,40.781384],[-73.988914,40.780228],[-73.988864,40.779925],[-73.991505,40.779826],[-73.991622,40.779562],[-73.988862,40.779724],[-73.990378,40.777584],[-73.99093,40.777564],[-73.9925,40.775604],[-73.992642,40.774961],[-73.994058,40.773344],[-73.996167,40.774189],[-73.996507,40.773785],[-73.994016,40.772794],[-73.99331,40.772838],[-73.984765,40.769232]]]},"properties":{"id":"lincoln_square","name":"Lincoln Square","status":"DISCOVERED","threat":"Low","locations":4,"missions":1,"summary":"Residential and institutional blocks on the west side with calmer patrol density than Midtown."},"id":"lincoln_square"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-74.005425,40.757314],[-73.999117,40.75459],[-73.993528,40.752228],[-73.982365,40.767401],[-73.98522,40.768595],[-73.984765,40.769232],[-73.99331,40.772838],[-73.994017,40.772794],[-73.996053,40.773605],[-73.9965,40.772963],[-73.996878,40.773123],[-73.997397,40.772412],[-73.995819,40.77175],[-73.996907,40.770277],[-73.998814,40.7711],[-74.007411,40.759096],[-74.005458,40.758289],[-74.005649,40.758],[-74.005133,40.757762],[-74.005425,40.757314]]]},"properties":{"id":"hells_kitchen","name":"Hell's Kitchen","status":"ACTIVE","threat":"High","locations":6,"missions":3,"summary":"A dense, high-risk corridor with active raids, narrow streets, and unstable controls."},"id":"hells_kitchen"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-74.007714,40.752452],[-74.002314,40.750228],[-73.999117,40.754591],[-74.005432,40.757324],[-74.006495,40.75584],[-74.007391,40.756214],[-74.007578,40.755975],[-74.006692,40.755601],[-74.00754,40.754425],[-74.008246,40.752652],[-74.007714,40.752452]]]},"properties":{"id":"hudson_yards","name":"Hudson Yards","status":"DISCOVERED","threat":"Low","locations":5,"missions":2,"summary":"New construction and transit hubs forming a clean but exposed edge against the west river."},"id":"hudson_yards"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-74.008197,40.742147],[-73.999668,40.738571],[-73.994253,40.746018],[-73.997084,40.747214],[-73.998472,40.745304],[-74.004141,40.747688],[-74.002314,40.750228],[-74.007717,40.752453],[-74.010139,40.753367],[-74.010724,40.752464],[-74.009094,40.751766],[-74.009343,40.751014],[-74.010735,40.751752],[-74.011049,40.750827],[-74.00977,40.750229],[-74.010162,40.749208],[-74.011323,40.749189],[-74.012087,40.74493],[-74.009574,40.744707],[-74.009721,40.743887],[-74.012253,40.744165],[-74.012399,40.743373],[-74.01079,40.743208],[-74.011636,40.741815],[-74.009145,40.740602],[-74.008197,40.742147]]]},"properties":{"id":"chelsea","name":"Chelsea","status":"CONTESTED","threat":"High","locations":7,"missions":3,"summary":"A dense urban corridor with active faction pressure and several high-value storefronts."},"id":"chelsea"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.989838,40.757244],[-73.984117,40.754838],[-73.97669,40.765011],[-73.982365,40.767401],[-73.989838,40.757244]]]},"properties":{"id":"times_square","name":"Times Square","status":"CONTESTED","threat":"High","locations":9,"missions":4,"summary":"Crowded civic space with high traffic exposure and frequent hostile engagements."},"id":"times_square"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.981814,40.758004],[-73.978546,40.75665],[-73.977203,40.75851],[-73.978503,40.759091],[-73.979406,40.757816],[-73.981347,40.758644],[-73.981814,40.758004]]]},"properties":{"id":"diamond_district","name":"Diamond District","status":"ACTIVE","threat":"Medium","locations":4,"missions":2,"summary":"Industrial blocks and jeweler corridors where contraband exchanges remain frequent."},"id":"diamond_district"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.997084,40.747214],[-73.994253,40.746018],[-73.990569,40.750997],[-73.999117,40.75459],[-74.002314,40.750228],[-74.004141,40.747688],[-73.998472,40.745304],[-73.997084,40.747214]]]},"properties":{"id":"pennsylvania_plaza","name":"Pennsylvania Plaza","status":"DISCOVERED","threat":"Medium","locations":6,"missions":2,"summary":"Transit and commercial choke points with resilient movement lanes and recurring patrols."},"id":"pennsylvania_plaza"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.999668,40.738571],[-73.993644,40.73599],[-73.988189,40.743457],[-73.994253,40.746018],[-73.999668,40.738571]]]},"properties":{"id":"tenderloin","name":"Tenderloin","status":"ACTIVE","threat":"High","locations":7,"missions":3,"summary":"Transit-heavy and contested, with brutal close-quarters hostile activity and dense cover."},"id":"tenderloin"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.990777,40.734762],[-73.9995,40.7385],[-74.008197,40.742147],[-74.010049,40.739127],[-74.010491,40.729841],[-74.005236,40.729335],[-74.005337,40.728604],[-74.002762,40.728383],[-73.996805,40.725434],[-73.991435,40.731723],[-73.990777,40.734762]]]},"properties":{"id":"greenwich_village","name":"Greenwich Village","status":"DISCOVERED","threat":"Low","locations":5,"missions":2,"summary":"Historic blocks and alleys that still provide strong concealment and reliable extraction routes."},"id":"greenwich_village"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.99,40.7145],[-73.9887,40.7166],[-73.9963,40.719],[-73.9975,40.7168],[-73.9985,40.7172],[-74.0018,40.7195],[-74.004,40.7168],[-74.0004,40.715],[-74.0003,40.7143],[-73.9985,40.7135],[-73.9973,40.714],[-73.994,40.7143],[-73.99,40.7145]]]},"properties":{"id":"chinatown","name":"Chinatown","status":"ACTIVE","threat":"Medium","locations":8,"missions":4,"summary":"Dense residential and commercial blocks with strong intelligence traffic and multiple safe routes."},"id":"chinatown"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.9913,40.7095],[-73.994,40.7143],[-73.9973,40.714],[-73.9985,40.7135],[-73.9982,40.7132],[-73.9995,40.7117],[-74.0023,40.7115],[-74.0028,40.7121],[-74.0044,40.7113],[-74.0063,40.7094],[-74.0052,40.7089],[-74.0014,40.7045],[-74,40.7055],[-74.001,40.7065],[-73.9975,40.7085],[-73.9913,40.7095]]]},"properties":{"id":"two_bridges","name":"Two Bridges","status":"ACTIVE","threat":"Medium","locations":5,"missions":2,"summary":"Waterfront approaches and crowded blocks where observing movement is as important as direct conflict."},"id":"two_bridges"},{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-73.9942,40.7045],[-73.996,40.7035],[-73.9984,40.7015],[-73.997,40.701],[-73.9975,40.7],[-73.9995,40.7005],[-74,40.699],[-73.9911,40.697],[-73.991,40.696],[-73.9885,40.696],[-73.9881,40.6996],[-73.9942,40.7045]]]},"properties":{"id":"brooklyn_heights","name":"Brooklyn Heights","status":"UNKNOWN","threat":"--","locations":2,"missions":1,"summary":"Urban overlooks and river pathways that connect Manhattan to the Brooklyn edge."},"id":"brooklyn_heights"}]}
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [-73.973503, 40.763641],
+                        [-73.949232, 40.796895],
+                        [-73.958152, 40.800644],
+                        [-73.981644, 40.768384],
+                        [-73.982365, 40.767401],
+                        [-73.97669, 40.765011],
+                        [-73.973503, 40.763641]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "central_park",
+                "name": "Central Park",
+                "status": "DISCOVERED",
+                "threat": "Low",
+                "locations": 5,
+                "missions": 2,
+                "summary": "A broad park corridor with clear sightlines, controlled access paths, and strong defensive angles."
+            },
+            "id": "central_park"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.958152,
+                            40.800644
+                        ],
+                        [
+                            -73.949232,
+                            40.796895
+                        ],
+                        [
+                            -73.944626,
+                            40.803227
+                        ],
+                        [
+                            -73.942994,
+                            40.802546
+                        ],
+                        [
+                            -73.941147,
+                            40.805066
+                        ],
+                        [
+                            -73.942759,
+                            40.80574
+                        ],
+                        [
+                            -73.933792,
+                            40.818157
+                        ],
+                        [
+                            -73.934221,
+                            40.82455
+                        ],
+                        [
+                            -73.934617,
+                            40.828048
+                        ],
+                        [
+                            -73.949597,
+                            40.834348
+                        ],
+                        [
+                            -73.95065,
+                            40.831333
+                        ],
+                        [
+                            -73.952095,
+                            40.829081
+                        ],
+                        [
+                            -73.954724,
+                            40.826086
+                        ],
+                        [
+                            -73.961014,
+                            40.818593
+                        ],
+                        [
+                            -73.958289,
+                            40.815691
+                        ],
+                        [
+                            -73.959639,
+                            40.813775
+                        ],
+                        [
+                            -73.956825,
+                            40.812624
+                        ],
+                        [
+                            -73.957794,
+                            40.811267
+                        ],
+                        [
+                            -73.95497,
+                            40.810059
+                        ],
+                        [
+                            -73.958176,
+                            40.805505
+                        ],
+                        [
+                            -73.95823,
+                            40.803103
+                        ],
+                        [
+                            -73.959615,
+                            40.801202
+                        ],
+                        [
+                            -73.958152,
+                            40.800644
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "harlem",
+                "name": "Harlem",
+                "status": "UNKNOWN",
+                "threat": "--",
+                "locations": 4,
+                "missions": 1,
+                "summary": "Northward avenues and residential blocks with mixed visibility and sporadic surveillance."
+            },
+            "id": "harlem"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.984765,
+                            40.769232
+                        ],
+                        [
+                            -73.984324,
+                            40.769842
+                        ],
+                        [
+                            -73.98222,
+                            40.768934
+                        ],
+                        [
+                            -73.982224,
+                            40.768352
+                        ],
+                        [
+                            -73.981644,
+                            40.768384
+                        ],
+                        [
+                            -73.975969,
+                            40.776226
+                        ],
+                        [
+                            -73.98817,
+                            40.781384
+                        ],
+                        [
+                            -73.988914,
+                            40.780228
+                        ],
+                        [
+                            -73.988864,
+                            40.779925
+                        ],
+                        [
+                            -73.991505,
+                            40.779826
+                        ],
+                        [
+                            -73.991622,
+                            40.779562
+                        ],
+                        [
+                            -73.988862,
+                            40.779724
+                        ],
+                        [
+                            -73.990378,
+                            40.777584
+                        ],
+                        [
+                            -73.99093,
+                            40.777564
+                        ],
+                        [
+                            -73.9925,
+                            40.775604
+                        ],
+                        [
+                            -73.992642,
+                            40.774961
+                        ],
+                        [
+                            -73.994058,
+                            40.773344
+                        ],
+                        [
+                            -73.996167,
+                            40.774189
+                        ],
+                        [
+                            -73.996507,
+                            40.773785
+                        ],
+                        [
+                            -73.994016,
+                            40.772794
+                        ],
+                        [
+                            -73.99331,
+                            40.772838
+                        ],
+                        [
+                            -73.984765,
+                            40.769232
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "lincoln_square",
+                "name": "Lincoln Square",
+                "status": "DISCOVERED",
+                "threat": "Low",
+                "locations": 4,
+                "missions": 1,
+                "summary": "Residential and institutional blocks on the west side with calmer patrol density than Midtown."
+            },
+            "id": "lincoln_square"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.005425,
+                            40.757314
+                        ],
+                        [
+                            -73.999117,
+                            40.75459
+                        ],
+                        [
+                            -73.993528,
+                            40.752228
+                        ],
+                        [
+                            -73.982365,
+                            40.767401
+                        ],
+                        [
+                            -73.98522,
+                            40.768595
+                        ],
+                        [
+                            -73.984765,
+                            40.769232
+                        ],
+                        [
+                            -73.99331,
+                            40.772838
+                        ],
+                        [
+                            -73.994017,
+                            40.772794
+                        ],
+                        [
+                            -73.996053,
+                            40.773605
+                        ],
+                        [
+                            -73.9965,
+                            40.772963
+                        ],
+                        [
+                            -73.996878,
+                            40.773123
+                        ],
+                        [
+                            -73.997397,
+                            40.772412
+                        ],
+                        [
+                            -73.995819,
+                            40.77175
+                        ],
+                        [
+                            -73.996907,
+                            40.770277
+                        ],
+                        [
+                            -73.998814,
+                            40.7711
+                        ],
+                        [
+                            -74.007411,
+                            40.759096
+                        ],
+                        [
+                            -74.005458,
+                            40.758289
+                        ],
+                        [
+                            -74.005649,
+                            40.758
+                        ],
+                        [
+                            -74.005133,
+                            40.757762
+                        ],
+                        [
+                            -74.005425,
+                            40.757314
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "hells_kitchen",
+                "name": "Hell's Kitchen",
+                "status": "ACTIVE",
+                "threat": "High",
+                "locations": 6,
+                "missions": 3,
+                "summary": "A dense, high-risk corridor with active raids, narrow streets, and unstable controls."
+            },
+            "id": "hells_kitchen"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.007714,
+                            40.752452
+                        ],
+                        [
+                            -74.002314,
+                            40.750228
+                        ],
+                        [
+                            -73.999117,
+                            40.754591
+                        ],
+                        [
+                            -74.005432,
+                            40.757324
+                        ],
+                        [
+                            -74.006495,
+                            40.75584
+                        ],
+                        [
+                            -74.007391,
+                            40.756214
+                        ],
+                        [
+                            -74.007578,
+                            40.755975
+                        ],
+                        [
+                            -74.006692,
+                            40.755601
+                        ],
+                        [
+                            -74.00754,
+                            40.754425
+                        ],
+                        [
+                            -74.008246,
+                            40.752652
+                        ],
+                        [
+                            -74.007714,
+                            40.752452
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "hudson_yards",
+                "name": "Hudson Yards",
+                "status": "DISCOVERED",
+                "threat": "Low",
+                "locations": 5,
+                "missions": 2,
+                "summary": "New construction and transit hubs forming a clean but exposed edge against the west river."
+            },
+            "id": "hudson_yards"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.008197,
+                            40.742147
+                        ],
+                        [
+                            -73.999668,
+                            40.738571
+                        ],
+                        [
+                            -73.994253,
+                            40.746018
+                        ],
+                        [
+                            -73.997084,
+                            40.747214
+                        ],
+                        [
+                            -73.998472,
+                            40.745304
+                        ],
+                        [
+                            -74.004141,
+                            40.747688
+                        ],
+                        [
+                            -74.002314,
+                            40.750228
+                        ],
+                        [
+                            -74.007717,
+                            40.752453
+                        ],
+                        [
+                            -74.010139,
+                            40.753367
+                        ],
+                        [
+                            -74.010724,
+                            40.752464
+                        ],
+                        [
+                            -74.009094,
+                            40.751766
+                        ],
+                        [
+                            -74.009343,
+                            40.751014
+                        ],
+                        [
+                            -74.010735,
+                            40.751752
+                        ],
+                        [
+                            -74.011049,
+                            40.750827
+                        ],
+                        [
+                            -74.00977,
+                            40.750229
+                        ],
+                        [
+                            -74.010162,
+                            40.749208
+                        ],
+                        [
+                            -74.011323,
+                            40.749189
+                        ],
+                        [
+                            -74.012087,
+                            40.74493
+                        ],
+                        [
+                            -74.009574,
+                            40.744707
+                        ],
+                        [
+                            -74.009721,
+                            40.743887
+                        ],
+                        [
+                            -74.012253,
+                            40.744165
+                        ],
+                        [
+                            -74.012399,
+                            40.743373
+                        ],
+                        [
+                            -74.01079,
+                            40.743208
+                        ],
+                        [
+                            -74.011636,
+                            40.741815
+                        ],
+                        [
+                            -74.009145,
+                            40.740602
+                        ],
+                        [
+                            -74.008197,
+                            40.742147
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "chelsea",
+                "name": "Chelsea",
+                "status": "CONTESTED",
+                "threat": "High",
+                "locations": 7,
+                "missions": 3,
+                "summary": "A dense urban corridor with active faction pressure and several high-value storefronts."
+            },
+            "id": "chelsea"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.989838,
+                            40.757244
+                        ],
+                        [
+                            -73.984117,
+                            40.754838
+                        ],
+                        [
+                            -73.97669,
+                            40.765011
+                        ],
+                        [
+                            -73.982365,
+                            40.767401
+                        ],
+                        [
+                            -73.989838,
+                            40.757244
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "times_square",
+                "name": "Times Square",
+                "status": "CONTESTED",
+                "threat": "High",
+                "locations": 9,
+                "missions": 4,
+                "summary": "Crowded civic space with high traffic exposure and frequent hostile engagements."
+            },
+            "id": "times_square"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.981814,
+                            40.758004
+                        ],
+                        [
+                            -73.978546,
+                            40.75665
+                        ],
+                        [
+                            -73.977203,
+                            40.75851
+                        ],
+                        [
+                            -73.978503,
+                            40.759091
+                        ],
+                        [
+                            -73.979406,
+                            40.757816
+                        ],
+                        [
+                            -73.981347,
+                            40.758644
+                        ],
+                        [
+                            -73.981814,
+                            40.758004
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "diamond_district",
+                "name": "Diamond District",
+                "status": "ACTIVE",
+                "threat": "Medium",
+                "locations": 4,
+                "missions": 2,
+                "summary": "Industrial blocks and jeweler corridors where contraband exchanges remain frequent."
+            },
+            "id": "diamond_district"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.997084,
+                            40.747214
+                        ],
+                        [
+                            -73.994253,
+                            40.746018
+                        ],
+                        [
+                            -73.990569,
+                            40.750997
+                        ],
+                        [
+                            -73.999117,
+                            40.75459
+                        ],
+                        [
+                            -74.002314,
+                            40.750228
+                        ],
+                        [
+                            -74.004141,
+                            40.747688
+                        ],
+                        [
+                            -73.998472,
+                            40.745304
+                        ],
+                        [
+                            -73.997084,
+                            40.747214
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "pennsylvania_plaza",
+                "name": "Pennsylvania Plaza",
+                "status": "DISCOVERED",
+                "threat": "Medium",
+                "locations": 6,
+                "missions": 2,
+                "summary": "Transit and commercial choke points with resilient movement lanes and recurring patrols."
+            },
+            "id": "pennsylvania_plaza"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.999668,
+                            40.738571
+                        ],
+                        [
+                            -73.993644,
+                            40.73599
+                        ],
+                        [
+                            -73.988189,
+                            40.743457
+                        ],
+                        [
+                            -73.994253,
+                            40.746018
+                        ],
+                        [
+                            -73.999668,
+                            40.738571
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "tenderloin",
+                "name": "Tenderloin",
+                "status": "ACTIVE",
+                "threat": "High",
+                "locations": 7,
+                "missions": 3,
+                "summary": "Transit-heavy and contested, with brutal close-quarters hostile activity and dense cover."
+            },
+            "id": "tenderloin"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.990777,
+                            40.734762
+                        ],
+                        [
+                            -73.9995,
+                            40.7385
+                        ],
+                        [
+                            -74.008197,
+                            40.742147
+                        ],
+                        [
+                            -74.010049,
+                            40.739127
+                        ],
+                        [
+                            -74.010491,
+                            40.729841
+                        ],
+                        [
+                            -74.005236,
+                            40.729335
+                        ],
+                        [
+                            -74.005337,
+                            40.728604
+                        ],
+                        [
+                            -74.002762,
+                            40.728383
+                        ],
+                        [
+                            -73.996805,
+                            40.725434
+                        ],
+                        [
+                            -73.991435,
+                            40.731723
+                        ],
+                        [
+                            -73.990777,
+                            40.734762
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "greenwich_village",
+                "name": "Greenwich Village",
+                "status": "DISCOVERED",
+                "threat": "Low",
+                "locations": 5,
+                "missions": 2,
+                "summary": "Historic blocks and alleys that still provide strong concealment and reliable extraction routes."
+            },
+            "id": "greenwich_village"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.99,
+                            40.7145
+                        ],
+                        [
+                            -73.9887,
+                            40.7166
+                        ],
+                        [
+                            -73.9963,
+                            40.719
+                        ],
+                        [
+                            -73.9975,
+                            40.7168
+                        ],
+                        [
+                            -73.9985,
+                            40.7172
+                        ],
+                        [
+                            -74.0018,
+                            40.7195
+                        ],
+                        [
+                            -74.004,
+                            40.7168
+                        ],
+                        [
+                            -74.0004,
+                            40.715
+                        ],
+                        [
+                            -74.0003,
+                            40.7143
+                        ],
+                        [
+                            -73.9985,
+                            40.7135
+                        ],
+                        [
+                            -73.9973,
+                            40.714
+                        ],
+                        [
+                            -73.994,
+                            40.7143
+                        ],
+                        [
+                            -73.99,
+                            40.7145
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "chinatown",
+                "name": "Chinatown",
+                "status": "ACTIVE",
+                "threat": "Medium",
+                "locations": 8,
+                "missions": 4,
+                "summary": "Dense residential and commercial blocks with strong intelligence traffic and multiple safe routes."
+            },
+            "id": "chinatown"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.9913,
+                            40.7095
+                        ],
+                        [
+                            -73.994,
+                            40.7143
+                        ],
+                        [
+                            -73.9973,
+                            40.714
+                        ],
+                        [
+                            -73.9985,
+                            40.7135
+                        ],
+                        [
+                            -73.9982,
+                            40.7132
+                        ],
+                        [
+                            -73.9995,
+                            40.7117
+                        ],
+                        [
+                            -74.0023,
+                            40.7115
+                        ],
+                        [
+                            -74.0028,
+                            40.7121
+                        ],
+                        [
+                            -74.0044,
+                            40.7113
+                        ],
+                        [
+                            -74.0063,
+                            40.7094
+                        ],
+                        [
+                            -74.0052,
+                            40.7089
+                        ],
+                        [
+                            -74.0014,
+                            40.7045
+                        ],
+                        [
+                            -74,
+                            40.7055
+                        ],
+                        [
+                            -74.001,
+                            40.7065
+                        ],
+                        [
+                            -73.9975,
+                            40.7085
+                        ],
+                        [
+                            -73.9913,
+                            40.7095
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "two_bridges",
+                "name": "Two Bridges",
+                "status": "ACTIVE",
+                "threat": "Medium",
+                "locations": 5,
+                "missions": 2,
+                "summary": "Waterfront approaches and crowded blocks where observing movement is as important as direct conflict."
+            },
+            "id": "two_bridges"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -73.9942,
+                            40.7045
+                        ],
+                        [
+                            -73.996,
+                            40.7035
+                        ],
+                        [
+                            -73.9984,
+                            40.7015
+                        ],
+                        [
+                            -73.997,
+                            40.701
+                        ],
+                        [
+                            -73.9975,
+                            40.7
+                        ],
+                        [
+                            -73.9995,
+                            40.7005
+                        ],
+                        [
+                            -74,
+                            40.699
+                        ],
+                        [
+                            -73.9911,
+                            40.697
+                        ],
+                        [
+                            -73.991,
+                            40.696
+                        ],
+                        [
+                            -73.9885,
+                            40.696
+                        ],
+                        [
+                            -73.9881,
+                            40.6996
+                        ],
+                        [
+                            -73.9942,
+                            40.7045
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "id": "brooklyn_heights",
+                "name": "Brooklyn Heights",
+                "status": "UNKNOWN",
+                "threat": "--",
+                "locations": 2,
+                "missions": 1,
+                "summary": "Urban overlooks and river pathways that connect Manhattan to the Brooklyn edge."
+            },
+            "id": "brooklyn_heights"
+        }
+    ]
+}

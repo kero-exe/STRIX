@@ -3,6 +3,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const { URLSearchParams } = require('url');
+const { getDistricts } = require('../database/db');
 
 require('dotenv').config();
 
@@ -59,10 +60,29 @@ function createActivityServer() {
     app.get('/health', (request, response) => response.json({ ok: true }));
     app.get('/api/districts', (request, response) => {
         try {
-            const districts = JSON.parse(fs.readFileSync(path.join(projectRoot, 'src', 'data', 'districts.geojson'), 'utf8'));
-            response.json(districts);
+            const source = JSON.parse(fs.readFileSync(path.join(projectRoot, 'src', 'data', 'districts.geojson'), 'utf8'));
+            response.json({
+                type: source.type,
+                features: source.features.map(feature => ({
+                    type: feature.type,
+                    id: feature.id || feature.properties?.id,
+                    properties: {
+                        id: feature.id || feature.properties?.id,
+                        name: feature.properties?.name || 'District'
+                    },
+                    geometry: feature.geometry
+                }))
+            });
         } catch (error) {
             console.error('Failed to read district GeoJSON:', error);
+            response.status(500).json({ error: 'District data is unavailable.' });
+        }
+    });
+    app.get('/api/district-data', (request, response) => {
+        try {
+            response.json({ districts: getDistricts() });
+        } catch (error) {
+            console.error('Failed to read district data:', error);
             response.status(500).json({ error: 'District data is unavailable.' });
         }
     });
