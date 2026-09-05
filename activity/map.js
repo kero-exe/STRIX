@@ -6,11 +6,21 @@ const districtDataUrl = apiBaseUrl ? `${apiBaseUrl}/api/district-data` : null;
 const mapStyle = {
   version: 8,
   sources: {},
-  layers: [{
-    id: 'background',
-    type: 'background',
-    paint: { 'background-color': '#0c0c0c' }
-  }]
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: { 'background-color': '#0c0c0c' }
+    },
+    {
+      id: 'grid-longitude',
+      type: 'background',
+      paint: {
+        'background-color': '#111820',
+        'background-opacity': 0.35
+      }
+    }
+  ]
 };
 
 function updateDistrictPanel(district) {
@@ -146,8 +156,9 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
       type: 'fill',
       source: 'strix-districts',
       paint: {
-        'fill-color': '#ff9a4c',
-        'fill-opacity': 0.2
+        'fill-color': '#ff6d10',
+        'fill-opacity': 0.42,
+        'fill-outline-color': '#ffd1a6'
       }
     });
 
