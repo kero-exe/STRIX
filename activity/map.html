@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>STRIX Interactive Map</title>
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body class="theme-dark">
     <main class="map-page">
@@ -15,7 +15,7 @@
                 <h1>Interactive Map</h1>
             </div>
             <nav class="map-page__nav" aria-label="Map navigation">
-                <a href="/" class="map-page__back">Back to hub</a>
+                <a href="./index.html" class="map-page__back">Back to hub</a>
             </nav>
         </header>
 
@@ -57,6 +57,7 @@
     </main>
 
     <script defer src="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.js" crossorigin="anonymous"></script>
-    <script defer type="module" src="/map-loader.js"></script>
+    <script defer src="./config.js"></script>
+    <script defer type="module" src="./map-loader.js"></script>
 </body>
 </html>

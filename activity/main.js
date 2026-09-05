@@ -10,6 +10,11 @@ const introVideo = document.querySelector('#intro-video');
 const shell = document.querySelector('.shell');
 const quickLinks = document.querySelectorAll('.quick-link');
 const mapButton = document.querySelector('#map-button');
+const apiBaseUrl = String(window.STRIX_CONFIG?.apiBaseUrl || '').replace(/\/$/, '');
+
+function apiUrl(path) {
+    return `${apiBaseUrl}${path}`;
+}
 
 function setStatus(message) {
     status.textContent = message;
@@ -88,12 +93,22 @@ if (introOverlay && introVideo) {
 if (mapButton) {
     mapButton.addEventListener('click', (event) => {
         event.preventDefault();
-        window.location.href = '/map.html';
+        window.location.href = './map.html';
     });
 }
 
 async function start() {
-    const config = await fetch('/api/config').then(response => response.json());
+    let config;
+    try {
+        const response = await fetch(apiUrl('/api/config'));
+        if (!response.ok) throw new Error(`Activity API returned ${response.status}.`);
+        config = await response.json();
+    } catch (error) {
+        setStatus(apiBaseUrl
+            ? 'The Activity backend is unavailable.'
+            : 'Configure an Activity backend to connect Discord.');
+        return;
+    }
     if (!config.clientId) {
         setStatus('Set DISCORD_CLIENT_ID to connect this Activity.');
         return;
@@ -109,7 +124,7 @@ async function start() {
         prompt: 'none',
         scope: ['identify']
     });
-    const tokenResponse = await fetch('/api/token', {
+    const tokenResponse = await fetch(apiUrl('/api/token'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code })

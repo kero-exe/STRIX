@@ -1,6 +1,9 @@
-const districtGeoJsonUrl = '/api/districts';
-const districtDataUrl = '/api/district-data';
-const mapStyleUrl = '/map-style.json';
+const apiBaseUrl = String(window.STRIX_CONFIG?.apiBaseUrl || '').replace(/\/$/, '');
+const districtGeoJsonUrl = apiBaseUrl
+  ? `${apiBaseUrl}/api/districts`
+  : new URL('./data/districts.geojson', import.meta.url).href;
+const districtDataUrl = apiBaseUrl ? `${apiBaseUrl}/api/district-data` : null;
+const mapStyleUrl = new URL('./map-style.json', import.meta.url).href;
 
 function updateDistrictPanel(district) {
   const nameEl = document.getElementById('district-name');
@@ -92,17 +95,19 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
     let districtData;
 
     try {
-      const [geometryResponse, dataResponse] = await Promise.all([
-        fetch(districtGeoJsonUrl),
-        fetch(districtDataUrl)
-      ]);
-      if (!geometryResponse.ok || !dataResponse.ok) {
-        throw new Error(`District API request failed with status ${geometryResponse.status}/${dataResponse.status}.`);
+      const geometryResponse = await fetch(districtGeoJsonUrl);
+      if (!geometryResponse.ok) throw new Error(`District geometry request failed with status ${geometryResponse.status}.`);
+      districtGeoJson = await geometryResponse.json();
+
+      if (districtDataUrl) {
+        const dataResponse = await fetch(districtDataUrl);
+        if (!dataResponse.ok) throw new Error(`District data request failed with status ${dataResponse.status}.`);
+        districtData = await dataResponse.json();
+      } else {
+        districtData = {
+          districts: districtGeoJson.features.map(feature => feature.properties || {})
+        };
       }
-      [districtGeoJson, districtData] = await Promise.all([
-        geometryResponse.json(),
-        dataResponse.json()
-      ]);
     } catch (error) {
       console.error('Failed to load district geometry and data.', error);
       return;
