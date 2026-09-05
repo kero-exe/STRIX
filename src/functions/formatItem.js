@@ -6,13 +6,13 @@ function formatItem(item) {
         lines.push(`**Cost:** \`${item.cost || '--'} units\``);
         return lines.join('\n');
     }
-    if (item.type) {
+    if (item.category === 'weapon') {
         const fields = [
-            ['Type', item.type], ['Cost', item.cost ? `${item.cost} units` : '--'],
-            ['Damage', item.damage], ['Damage Type', item.damage_type], ['Firerate', item.firerate],
+            ['ID', item.key], ['Weapon Type', item.type], ['Cost', item.cost ? `${item.cost} units` : '--'],
+            ['Damage', item.damage], ['Fire Mode', item.firerate],
             ['Magazine', item.magazine ? `${item.magazine} rd` : '--'],
-            ['Range', item.range_max || item.range_min ? `${item.range_max || '--'} Max, ${item.range_min || '--'} Min` : '--'],
-            ['Properties', item.properties], ['Ammo Type', item.ammo_type]
+            ['Range', item.range_min || '--'],
+            ['Properties', item.properties], ['Ammo', item.ammo_type]
         ];
         for (const [label, value] of fields) lines.push(`**${label}:** \`${value || '--'}\``);
     }

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SHD Agent Card Designer</title>
+    <style>
+        :root { color-scheme: dark; font-family: Borda, sans-serif; background: #111; color: #f7f7f7; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #111; }
+        main { width: min(94vw, 1240px); padding: 28px 0; }
+        header { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+        h1 { margin: 0; color: #ff6216; font-size: clamp(1.3rem, 3vw, 2rem); letter-spacing: .04em; }
+        p { margin: 0; color: #cfad6a; font-size: .9rem; }
+        .preview { padding: 12px; border: 1px solid #ff6216; background: #1f1f1f; box-shadow: 0 0 38px #000; }
+        img { display: block; width: 100%; height: auto; background: #1f1f1f; }
+        #status { min-width: 7ch; text-align: right; }
+        .themes { display: flex; gap: 8px; margin-bottom: 14px; }
+        button { border: 1px solid #cfad6a; background: #1f1f1f; color: #f7f7f7; padding: 8px 12px; font: inherit; cursor: pointer; }
+        button.active { border-color: #ff6216; color: #ff6216; }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>SHD // AGENT CARD DESIGNER</h1>
+            <p id="status">LIVE</p>
+        </header>
+        <nav class="themes" aria-label="Card theme">
+            <button type="button" data-theme="dark" class="active">Dark</button>
+            <button type="button" data-theme="light">Light</button>
+        </nav>
+        <section class="preview"><img id="card" src="/api/card" alt="Live SHD agent card preview"></section>
+    </main>
+    <script>
+        const image = document.getElementById('card');
+        const status = document.getElementById('status');
+        let theme = 'dark';
+        const refresh = version => {
+            image.src = `/api/card?theme=${theme}&v=${version}`;
+            status.textContent = 'UPDATED';
+            setTimeout(() => { status.textContent = 'LIVE'; }, 800);
+        };
+        document.querySelectorAll('[data-theme]').forEach(button => button.addEventListener('click', () => {
+            theme = button.dataset.theme;
+            document.querySelectorAll('[data-theme]').forEach(item => item.classList.toggle('active', item === button));
+            refresh(Date.now());
+        }));
+        new EventSource('/api/events').onmessage = event => refresh(JSON.parse(event.data).version);
+    </script>
+</body>
+</html>

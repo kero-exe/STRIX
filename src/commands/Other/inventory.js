@@ -1,13 +1,13 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 const { getUser, getInventory, getEquipment, getItem, addItem, addAmmunition, removeItem, getItemLabel, getItemValue, getAmmunitionLabel, sellItem, transferUnits, transferItem, transferAmmunition, resolveItemKey } = require('../../database/db');
 
-function hasDmRole(member) {
+function hasCoordinatorRole(member) {
     if (!member || !member.roles || !member.roles.cache) {
         return false;
     }
 
-    const roleId = process.env.DM_ROLE_ID;
-    const roleName = (process.env.DM_ROLE_NAME || 'DM').toLowerCase();
+    const roleId = process.env.COORDINATOR_ROLE_ID;
+    const roleName = (process.env.COORDINATOR_ROLE_NAME || 'Coordinator').toLowerCase();
 
     return member.roles.cache.some(role => {
         const matchesRoleId = Boolean(roleId) && role.id === roleId;
@@ -63,7 +63,7 @@ module.exports = {
                         .setRequired(false))
                 .addStringOption(option =>
                     option.setName('ammunition')
-                        .setDescription('Ammunition type to give, such as 9mm or .45 ACP')
+                        .setDescription('Ammunition type to give, such as 9mm or 45ACP')
                         .setRequired(false))
                 .addIntegerOption(option =>
                     option.setName('amount')
@@ -73,14 +73,14 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
-                .setDescription('Add an item to a player inventory (DM only)')
+                .setDescription('Add an item to a player inventory (Coordinator only)')
                 .addStringOption(option =>
                     option.setName('item')
                         .setDescription('The item key to add')
                         .setRequired(false))
                 .addStringOption(option =>
                     option.setName('ammunition')
-                        .setDescription('Ammunition type to add, such as 9mm or .45 ACP')
+                        .setDescription('Ammunition type to add, such as 9mm or 45ACP')
                         .setRequired(false))
                 .addIntegerOption(option =>
                     option.setName('quantity')
@@ -94,7 +94,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
-                .setDescription('Remove an item from a player inventory (DM only)')
+                .setDescription('Remove an item from a player inventory (Coordinator only)')
                 .addStringOption(option =>
                     option.setName('item')
                         .setDescription('The item key to remove')
@@ -126,9 +126,9 @@ module.exports = {
         const targetUser = getUser(targetDiscordId);
 
         if ((subcommand === 'add' || subcommand === 'remove') || (subcommand === 'view' && requestedPlayer)) {
-            if (!hasDmRole(interaction.member)) {
+            if (!hasCoordinatorRole(interaction.member)) {
                 await interaction.reply({
-                    content: 'Only users with the DM role can manage another player inventory.',
+                    content: 'Only users with the Coordinator role can manage another player inventory.',
                 });
                 return;
             }
@@ -311,7 +311,7 @@ module.exports = {
             const sellRatio = Number(process.env.SELL_RATIO || '0.5');
             const unitsEarned = Math.floor(itemValue * sellRatio * quantity);
 
-            const confirmationMessage = await interaction.reply({
+            await interaction.reply({
                 content: `Sell ${quantity}x ${getItemLabel(itemKey)} for ${unitsEarned} units?`,
                 components: [new ActionRowBuilder().addComponents(
                     new ButtonBuilder()
@@ -325,8 +325,8 @@ module.exports = {
                         .setEmoji('❎')
                         .setStyle(ButtonStyle.Danger),
                 )],
-                fetchReply: true,
             });
+            const confirmationMessage = await interaction.fetchReply();
 
             let confirmation;
             try {

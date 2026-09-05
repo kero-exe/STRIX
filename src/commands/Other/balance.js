@@ -4,10 +4,10 @@ const { getUser } = require('../../database/db');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('balance')
-        .setDescription('Check a player balance.')
+        .setDescription('Check an Agent\'s balance.')
         .addUserOption(option =>
             option.setName('player')
-                .setDescription('The player whose balance to check')
+                .setDescription('The Agent whose balance to check')
                 .setRequired(false)),
     async execute(interaction) {
         const targetUser = interaction.options.getUser('player') || interaction.user;
@@ -15,13 +15,13 @@ module.exports = {
 
         if (!user) {
             await interaction.reply({
-                content: `${targetUser.username} is not registered yet.`,
+                content: `Agent ${targetUser.username} is not authorized yet.`,
             });
             return;
         }
 
         await interaction.reply({
-            content: `${targetUser.username} has ${user.units} units.`
+            content: `Agent ${targetUser.username} has ${user.units} units.`
         });
     }
 };
