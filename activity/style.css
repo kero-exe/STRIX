@@ -1,4 +1,9 @@
-@import url("https://fonts.cdnfonts.com/css/borda");
+@font-face {
+    font-family: "Borda";
+    font-style: normal;
+    font-weight: 400;
+    src: url("./fonts/Borda.woff") format("woff");
+}
 
 :root {
     color-scheme: light;

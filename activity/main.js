@@ -1,4 +1,4 @@
-import { DiscordSDK } from 'https://cdn.jsdelivr.net/npm/@discord/embedded-app-sdk@2/+esm';
+import { DiscordSDK } from './vendor/discord-embedded-app-sdk.mjs';
 
 const status = document.querySelector('#status');
 const agentCard = document.querySelector('#agent-card');
