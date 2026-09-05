@@ -53,6 +53,19 @@
             }, 700);
         }, 2500);
     </script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const initialDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const updateTheme = isDark => {
+            document.body.classList.toggle('theme-dark', isDark);
+            themeToggle.setAttribute('aria-pressed', String(isDark));
+            themeToggle.textContent = isDark ? 'Light theme' : 'Dark theme';
+        };
+        updateTheme(initialDark);
+        themeToggle.addEventListener('click', () => {
+            updateTheme(!document.body.classList.contains('theme-dark'));
+        });
+    </script>
     <script src="./config.js"></script>
     <script type="module" src="./main.js"></script>
 </body>

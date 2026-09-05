@@ -3,7 +3,6 @@ import { DiscordSDK } from './vendor/discord-embedded-app-sdk.mjs';
 const status = document.querySelector('#status');
 const agentCard = document.querySelector('#agent-card');
 const agentName = document.querySelector('#agent-name');
-const themeToggle = document.querySelector('#theme-toggle');
 const layoutGroup = document.querySelector('#layout-panel-group');
 const introOverlay = document.querySelector('#intro-overlay');
 const introVideo = document.querySelector('#intro-video');
@@ -20,12 +19,6 @@ function setStatus(message) {
     status.textContent = message;
 }
 
-function updateThemeButton(isDark) {
-    document.body.classList.toggle('theme-dark', isDark);
-    themeToggle.setAttribute('aria-pressed', String(isDark));
-    themeToggle.textContent = isDark ? 'Light theme' : 'Dark theme';
-}
-
 function applyParallaxFromValues(x, y) {
     if (!layoutGroup) return;
 
@@ -34,16 +27,6 @@ function applyParallaxFromValues(x, y) {
 
     layoutGroup.style.transform = `translate(${dx * 0.55}px, ${dy * 0.55}px)`;
     layoutGroup.style.boxShadow = `0 18px 36px rgba(17, 17, 17, 0.2), ${dx * 1.4}px ${dy * 1.4}px 0 rgba(0, 0, 0, 0.08)`;
-}
-
-if (themeToggle) {
-    const initialDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    updateThemeButton(initialDark);
-
-    themeToggle.addEventListener('click', () => {
-        const isDark = !document.body.classList.contains('theme-dark');
-        updateThemeButton(isDark);
-    });
 }
 
 if (layoutGroup) {
