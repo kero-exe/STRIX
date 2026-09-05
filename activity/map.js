@@ -3,7 +3,15 @@ const districtGeoJsonUrl = apiBaseUrl
   ? `${apiBaseUrl}/api/districts`
   : new URL('./data/districts.geojson', import.meta.url).href;
 const districtDataUrl = apiBaseUrl ? `${apiBaseUrl}/api/district-data` : null;
-const mapStyleUrl = new URL('./map-style.json', import.meta.url).href;
+const mapStyle = {
+  version: 8,
+  sources: {},
+  layers: [{
+    id: 'background',
+    type: 'background',
+    paint: { 'background-color': '#0c0c0c' }
+  }]
+};
 
 function updateDistrictPanel(district) {
   const nameEl = document.getElementById('district-name');
@@ -54,7 +62,7 @@ export async function initDistrictMap({ container, defaultCenter, defaultZoom, m
 
   const map = new maplibregl.Map({
     container: mapRoot,
-    style: mapStyleUrl,
+    style: mapStyle,
     center: defaultCenter,
     zoom: defaultZoom,
     minZoom,
