@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>STRIX Activity</title>
-    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.2.0/dist/maplibre-gl.css" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -43,6 +42,17 @@
             </button>
         </div>
     </main>
+    <script>
+        window.setTimeout(() => {
+            document.body.classList.add('ready');
+            const overlay = document.getElementById('intro-overlay');
+            if (!overlay) return;
+            overlay.classList.add('is-hidden');
+            window.setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 700);
+        }, 2500);
+    </script>
     <script src="./config.js"></script>
     <script type="module" src="./main.js"></script>
 </body>
